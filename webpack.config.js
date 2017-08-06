@@ -19,6 +19,7 @@ module.exports = {
   module: {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
+      { test: /\.(ttf|eot|svg|woff2?)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
       { test: /\.scss$/,
         use: [
           'style-loader',
@@ -27,7 +28,8 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               includePaths: [
-                path.resolve(__dirname, './node_modules/bootstrap/scss/')
+                path.resolve(__dirname, './node_modules/bootstrap/scss/'),
+                path.resolve(__dirname, './node_modules/font-awesome/scss/')
               ]
             }
           }

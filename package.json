@@ -33,6 +33,8 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "bootstrap": "^4.0.0-alpha.6",
     "express": "^4.15.3",
+    "file-loader": "^0.11.2",
+    "font-awesome": "^4.7.0",
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6"
   }
