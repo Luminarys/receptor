@@ -1,0 +1,1 @@
+export const UPDATE_RESOURCES = 'UPDATE_RESOURCES';
