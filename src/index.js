@@ -4,6 +4,13 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import scss from '../scss/base.scss';
+import { ws_init } from './socket';
+import { filter_subscribe } from './actions/filter_subscribe';
+
+ws_init(() => {
+  store.dispatch(filter_subscribe());
+  store.dispatch(filter_subscribe('server'));
+});
 
 render(
   <Provider store={store}>
