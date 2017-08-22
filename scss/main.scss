@@ -1,0 +1,37 @@
+@import "base";
+
+.table {
+  tbody td {
+    border: none;
+  }
+}
+
+.torrent {
+  &.paused {
+    color: $gray-dark;
+    background: $gray-lighter;
+  }
+
+  &.idle {
+    color: $gray-dark;
+  }
+
+  &.error {
+    background-color: $brand-danger;
+    color: $white;
+    a {
+      color: $white;
+      text-decoration: underline;
+    }
+  }
+
+  &.seeding {
+    background-image: linear-gradient(to right, lighten($brand-info, 20), $brand-info);
+  }
+
+  &.leeching {
+    background-image: linear-gradient(to right, lighten($brand-success, 20), $brand-success);
+  }
+
+  background-repeat: no-repeat;
+}
