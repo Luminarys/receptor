@@ -25,6 +25,10 @@
     }
   }
 
+  &.pending {
+    background-image: linear-gradient(to right, darken($gray-lighter, 10), $gray-lighter);
+  }
+
   &.seeding {
     background-image: linear-gradient(to right, lighten($brand-info, 20), $brand-info);
   }
@@ -34,7 +38,7 @@
   }
 
   background-repeat: no-repeat;
-  background-position: bottom;
+  background-position: left bottom;
 }
 
 .navbar {

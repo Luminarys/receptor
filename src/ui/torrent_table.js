@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+function formatBitrate(bitrate) {
+  if (bitrate > 1000000000) {
+    return `${(bitrate / 1000000000).toFixed(2)} Gb/s`;
+  } else if (bitrate > 1000000) {
+    return `${(bitrate / 1000000).toFixed(2)} Mb/s`;
+  } else if (bitrate > 1000) {
+    return `${(bitrate / 1000).toFixed(2)} Kb/s`;
+  } else {
+    return `${bitrate} b/s`;
+  }
+}
+
 class TorrentTable extends Component {
   render() {
     const { torrents } = this.props;
@@ -31,8 +43,8 @@ class TorrentTable extends Component {
                   {t.name}
                 </a>
               </td>
-              <td>{t.rate_up}</td>
-              <td>{t.rate_down}</td>
+              <td>{formatBitrate(t.rate_up)}</td>
+              <td>{formatBitrate(t.rate_down)}</td>
             </tr>
           )}
         </tbody>
