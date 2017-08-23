@@ -9,7 +9,7 @@ export default function torrents(state = {}, action) {
           .filter(r => r.type === "torrent")
           .reduce((s, r) => ({
             ...s,
-            [r.id]: { ...s[r.id], ...r }
+            [r.id]: { ...state[r.id], ...r }
           }), {})
       };
   }

@@ -36,3 +36,15 @@
   background-repeat: no-repeat;
   background-position: bottom;
 }
+
+.navbar {
+  input[type="text"] {
+    margin-top: 7px;
+    margin-left: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .navbar-brand {
+    margin-top: -11px;
+  }
+}

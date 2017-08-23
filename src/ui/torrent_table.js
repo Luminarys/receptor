@@ -8,6 +8,7 @@ class TorrentTable extends Component {
       <table className="table">
         <thead>
           <tr>
+            <th style={{width: "1px"}}></th>
             <th>name</th>
             <th>up</th>
             <th>down</th>
@@ -17,11 +18,14 @@ class TorrentTable extends Component {
           {Object.values(torrents).map(t =>
             <tr
               key={t.id}
-              className={`torrent ${"seeding" || t.status}`}
+              className={`torrent ${t.status}`}
               style={{
                 backgroundSize: `${t.progress * 100}% 3px`
               }}
             >
+              <td>
+                <input type="checkbox" />
+              </td>
               <td>
                 <a href="#">
                   {t.name}
