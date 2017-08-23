@@ -19,7 +19,7 @@ class TorrentTable extends Component {
               key={t.id}
               className={`torrent ${"seeding" || t.status}`}
               style={{
-                backgroundSize: `${t.progress * 100}% 100%`
+                backgroundSize: `${t.progress * 100}% 3px`
               }}
             >
               <td>

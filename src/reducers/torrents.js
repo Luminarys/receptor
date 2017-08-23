@@ -7,7 +7,10 @@ export default function torrents(state = {}, action) {
         ...state,
         ...action.resources
           .filter(r => r.type === "torrent")
-          .reduce((s, r) => ({ ...s, [r.id]: r }), {})
+          .reduce((s, r) => ({
+            ...s,
+            [r.id]: { ...s[r.id], ...r }
+          }), {})
       };
   }
   return state;
