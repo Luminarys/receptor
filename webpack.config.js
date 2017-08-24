@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 
+
 const defines = {
   "DEFAULT_WS_URI": process.env.WEBSOCKET_URI || "ws://localhost:8412/"
 };
@@ -9,6 +10,7 @@ module.exports = {
   devtool: "source-map",
   entry: [
     "webpack-hot-middleware/client",
+    "font-awesome-sass-loader!./font-awesome.config.js",
     "./src/index.js"
   ],
   output: {
@@ -19,7 +21,17 @@ module.exports = {
   module: {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-      { test: /\.(ttf|eot|svg|woff2?)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: [
+          {
+            loader: 'url-loader',
+            options: { limit: 10000, mimetype: 'application/font-woff' },
+          }
+        ]
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: [ { loader: 'file-loader' } ]
+      },
       { test: /\.scss$/,
         use: [
           'style-loader',

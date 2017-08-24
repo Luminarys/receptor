@@ -52,3 +52,31 @@
     margin-top: -11px;
   }
 }
+
+.card {
+  border-radius: 0;
+
+  .card-block {
+    padding: 0.5rem;
+  }
+}
+
+.progress-maxheight {
+  height: 100%;
+
+  .progress-bar {
+    height: 100%;
+  }
+}
+
+.nav-link {
+  &.btn-primary {
+    color: white !important;
+
+    &.active {
+      color: black !important;
+      background: transparent !important;
+      border: 1px solid $brand-primary;
+    }
+  }
+}

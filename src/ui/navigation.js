@@ -9,7 +9,7 @@ export default function render(props) {
         <li className="nav-item">
           <NavLink
             to="/add-torrent"
-            className="nav-link"
+            className="nav-link btn-primary"
             activeClassName="nav-link active"
           >add torrent</NavLink>
         </li>

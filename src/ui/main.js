@@ -13,7 +13,7 @@ export default class Main extends Component {
         </div>
         <div className="col-md-4">
           <Route path="/add-torrent" component={AddTorrent} />
-          <Route path="/torrents/:id" component={TorrentDetails} />
+          <Route path="/torrents/:ids" component={TorrentDetails} />
         </div>
       </div>
     );

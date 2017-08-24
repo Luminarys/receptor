@@ -26,6 +26,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
+    "reactstrap": "^4.8.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "style-loader": "^0.18.2",
@@ -35,14 +36,20 @@
   },
   "dependencies": {
     "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.0.0-alpha.6",
     "express": "^4.15.3",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
+    "font-awesome-sass-loader": "^2.0.1",
     "history": "^4.7.2",
+    "isomorphic-fetch": "^2.2.1",
     "node-sass": "^4.5.3",
+    "react-fontawesome": "^1.6.1",
     "react-router-dom": "^4.2.0",
     "react-router-redux": "^5.0.0-alpha.6",
-    "sass-loader": "^6.0.6"
+    "react-transition-group": "^2.2.0",
+    "sass-loader": "^6.0.6",
+    "url-loader": "^0.5.9"
   }
 }
