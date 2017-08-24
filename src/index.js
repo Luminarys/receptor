@@ -1,8 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
 
-import store from './store';
+import store, { history } from './store';
 import scss from '../scss/main.scss';
 import { ws_init } from './socket';
 import { filter_subscribe } from './actions/filter_subscribe';
@@ -17,12 +18,14 @@ ws_init(() => {
 
 render(
   <Provider store={store}>
-    <div>
-      <Nav />
-      <div className="container">
-        <Main />
+    <ConnectedRouter history={history}>
+      <div>
+        <Nav />
+        <div className="container">
+          <Main />
+        </div>
       </div>
-    </div>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
 );

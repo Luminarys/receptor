@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function render(props) {
   return <nav className="navbar navbar-light navbar-toggleable-xl">
@@ -6,7 +7,11 @@ export default function render(props) {
     <div className="navbar-collapse collapse">
       <ul className="navbar-nav mr-auto">
         <li className="nav-item">
-          <a className="nav-link" href="#">add torrent</a>
+          <NavLink
+            to="/add-torrent"
+            className="nav-link"
+            activeClassName="nav-link active"
+          >add torrent</NavLink>
         </li>
         <li className="nav-item" style={{minWidth: "1rem"}}>
         </li>
