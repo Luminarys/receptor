@@ -52,5 +52,11 @@ module.exports = {
   plugins:[
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin(defines)
-  ]
+  ],
+  resolve: {
+    alias: {
+      "react": "preact-compat",
+      "react-dom": "preact-compat"
+    }
+  }
 };
