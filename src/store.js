@@ -19,5 +19,6 @@ const store = createStore(
 );
 
 export const dispatch = action => store.dispatch(action);
+export const getState = () => store.getState();
 
 export default store;

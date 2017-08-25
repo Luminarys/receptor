@@ -9,7 +9,7 @@
 .torrent {
   &.paused {
     color: $gray-dark;
-    background: $gray-lighter;
+    background-color: $gray-lighter;
   }
 
   &.idle {
@@ -25,12 +25,16 @@
     }
   }
 
-  &.pending {
-    background-image: linear-gradient(to right, darken($gray-lighter, 10), $gray-lighter);
+  &.paused {
+    background-image: linear-gradient(to right, darken($gray-lighter, 20), darken($gray-lighter, 40));
+  }
+
+  &.pending, &.idle {
+    background-image: linear-gradient(to right, lighten($brand-info, 20), $brand-info);
   }
 
   &.seeding {
-    background-image: linear-gradient(to right, lighten($brand-info, 20), $brand-info);
+    background-image: linear-gradient(to right, lighten($brand-primary, 20), $brand-primary);
   }
 
   &.leeching {

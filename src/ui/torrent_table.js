@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
+import { activeTorrents, selectTorrent, selectop } from '../torrent_state';
 
 function formatBitrate(bitrate) {
   if (bitrate > 1000000000) {
@@ -14,44 +14,10 @@ function formatBitrate(bitrate) {
   }
 }
 
-function activeTorrents(router) {
-  const { pathname } = router.location;
-  if (pathname.indexOf("/torrents/") !== 0) {
-    return [];
-  } else {
-    return pathname.slice("/torrents/".length).split(",");
-  }
-}
-
-const EXCLUSIVE = 1, UNION = 2, SUBTRACT = 3;
-
-function selectTorrent(dispatch, t, router, action = UNION) {
-  let active = activeTorrents(router);
-  switch (action) {
-    case EXCLUSIVE:
-      active = [t.id];
-      break;
-    case UNION:
-      if (active.indexOf(t.id) === -1) {
-        active = [...active, t.id];
-      }
-      break;
-    case SUBTRACT:
-      if (active.indexOf(t.id) !== -1) {
-        active = active.filter(a => a != t.id);
-      }
-      break;
-  }
-  const url = active.length === 0 ? "/" : `/torrents/${active.join(',')}`;
-  if (url !== router.location) {
-    dispatch(push(url));
-  }
-}
-
 class TorrentTable extends Component {
   render() {
-    const { torrents, router, dispatch } = this.props;
-    const active = activeTorrents(router);
+    const { torrents } = this.props;
+    const active = activeTorrents();
     return (
       <table className="table">
         <thead>
@@ -81,8 +47,8 @@ class TorrentTable extends Component {
                   type="checkbox"
                   checked={active.indexOf(t.id) !== -1}
                   onChange={e =>
-                    selectTorrent(dispatch,
-                      t, router, e.target.checked ? UNION : SUBTRACT)}
+                    selectTorrent(t,
+                      e.target.checked ? selectop.UNION : selectop.SUBTRACT)}
                 />
               </td>
               <td>
@@ -90,7 +56,7 @@ class TorrentTable extends Component {
                   href="#"
                   onClick={e => {
                     e.preventDefault();
-                    selectTorrent(dispatch, t, router, EXCLUSIVE);
+                    selectTorrent(t, selectop.EXCLUSIVE);
                   }}
                 >
                   {t.name}

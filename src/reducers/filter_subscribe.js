@@ -6,12 +6,19 @@ import {
 export default function filter_subscribe(state = [], action) {
   switch (action.type) {
     case FILTER_SUBSCRIBE: {
-      const { serial } = action;
-      return [...state, serial];
+      const { serial, kind, criteria } = action;
+      return [
+        ...state,
+        {
+          serial,
+          kind,
+          criteria
+        }
+      ];
     }
     case FILTER_UNSUBSCRIBE: {
-      const { serial } = action;
-      return state.filter(s => s !== serial);
+      const { _serial } = action;
+      return state.filter(({ serial }) => serial !== _serial);
     }
   }
   return state;

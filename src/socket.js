@@ -10,12 +10,13 @@ export default function ws_send(type, body, callback = null) {
   if (callback) {
     transactions[_serial] = callback;
   }
-  const msg = JSON.stringify({
+  const obj = {
     type,
     serial: _serial,
     ...body
-  });
-  console.log("->", msg);
+  };
+  const msg = JSON.stringify(obj);
+  console.log("->", obj);
   ws.send(msg);
   return _serial;
 }
