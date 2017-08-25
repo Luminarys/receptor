@@ -13,9 +13,8 @@ import {
   Progress
 } from 'reactstrap';
 import ws_send from '../socket';
+import selectTorrent, { UNION } from '../actions/selection';
 
-// TODO: use component lifecycle functions here to invoke
-// torrent_state.updateSubscriptions
 // TODO: fix navigating directly to torrent pages
 
 function File({ file }) {
@@ -152,6 +151,13 @@ class TorrentDetails extends Component {
     };
   }
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    const { ids } = this.props.match.params;
+    const _ids = ids.split(",");
+    _ids.forEach(id => dispatch(selectTorrent(id, UNION)));
+  }
+
   renderHeader(selection) {
     return (
       <div>
@@ -197,5 +203,6 @@ export default connect(state => ({
   router: state.router,
   torrents: state.torrents,
   files: state.files,
-  selection: state.selection
+  selection: state.selection,
+  server: state.server
 }))(TorrentDetails);

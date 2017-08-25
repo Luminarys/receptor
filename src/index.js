@@ -12,27 +12,23 @@ import { filter_subscribe } from './actions/filter_subscribe';
 
 import Nav from './ui/navigation';
 import Main from './ui/main';
+import Connection from './ui/connection';
+
+const root = document.getElementById('root');
+ReactDOM.render(<Connection />, root);
 
 ws_init(() => {
   store.dispatch(filter_subscribe());
   store.dispatch(filter_subscribe('server'));
-});
-
-const render = App => ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <div>
-        <Nav />
-        <div className="container">
-          <App />
+  ReactDOM.render(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <div>
+          <Nav />
+          <div className="container">
+            <Main />
+          </div>
         </div>
-      </div>
-    </ConnectedRouter>
-  </Provider>,
-  document.getElementById('root'));
-
-render(Main);
-
-if (module.hot) {
-  module.hot.accept('./ui/main', () => render(Main));
-}
+      </ConnectedRouter>
+    </Provider>, root);
+});
