@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import 'preact/devtools';
+import './polyfills';
 
 import store, { history } from './store';
 import scss from '../scss/main.scss';

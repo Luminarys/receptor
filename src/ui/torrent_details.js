@@ -15,8 +15,6 @@ import {
 import ws_send from '../socket';
 import selectTorrent, { UNION, NONE } from '../actions/selection';
 
-// TODO: fix navigating directly to torrent pages
-
 function File({ file }) {
   // TODO: show progress bar
   // TODO: edit priority
@@ -168,8 +166,18 @@ class TorrentDetails extends Component {
       <div>
         <h3>{selection.length} torrents</h3>
         <ButtonGroup>
-          <button className="btn btn-default btn-sm">Pause all</button>
-          <button className="btn btn-default btn-sm">Resume all</button>
+          <button
+            className="btn btn-default btn-sm"
+            onClick={() => {
+              selection.forEach(id => ws_send("PAUSE_TORRENT", { id }));
+            }}
+          >Pause all</button>
+          <button
+            className="btn btn-default btn-sm"
+            onClick={() => {
+              selection.forEach(id => ws_send("RESUME_TORRENT", { id }));
+            }}
+          >Resume all</button>
           <ButtonDropdown
             isOpen={this.state.removeDropdown}
             toggle={() => this.setState({ removeDropdown: !this.state.removeDropdown })}

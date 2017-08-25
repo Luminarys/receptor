@@ -7,14 +7,6 @@ export const SUBTRACT = 'SUBTRACT';
 export const EXCLUSIVE = 'EXCLUSIVE';
 export const NONE = 'NONE';
 
-Set.prototype.difference = function(set) {
-  var diff = new Set(this);
-  for (var v of set) {
-    diff.delete(v);
-  }
-  return diff;
-}
-
 export default function selectTorrent(id, action) {
   return (dispatch, getState) => {
     const previous = new Set(getState().selection);
