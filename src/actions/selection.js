@@ -5,6 +5,7 @@ import { push } from 'react-router-redux';
 export const UNION = 'UNION';
 export const SUBTRACT = 'SUBTRACT';
 export const EXCLUSIVE = 'EXCLUSIVE';
+export const NONE = 'NONE';
 
 Set.prototype.difference = function(set) {
   var diff = new Set(this);

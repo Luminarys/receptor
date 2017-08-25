@@ -13,7 +13,7 @@ import {
   Progress
 } from 'reactstrap';
 import ws_send from '../socket';
-import selectTorrent, { UNION } from '../actions/selection';
+import selectTorrent, { UNION, NONE } from '../actions/selection';
 
 // TODO: fix navigating directly to torrent pages
 
@@ -156,6 +156,11 @@ class TorrentDetails extends Component {
     const { ids } = this.props.match.params;
     const _ids = ids.split(",");
     _ids.forEach(id => dispatch(selectTorrent(id, UNION)));
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch(selectTorrent(null, NONE));
   }
 
   renderHeader(selection) {
