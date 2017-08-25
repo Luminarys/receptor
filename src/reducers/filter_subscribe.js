@@ -17,8 +17,8 @@ export default function filter_subscribe(state = [], action) {
       ];
     }
     case FILTER_UNSUBSCRIBE: {
-      const { _serial } = action;
-      return state.filter(({ serial }) => serial !== _serial);
+      const { serial } = action;
+      return state.filter(filter => filter.serial !== serial);
     }
   }
   return state;

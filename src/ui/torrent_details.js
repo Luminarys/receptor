@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { activeTorrents } from '../torrent_state';
 import FontAwesome from 'react-fontawesome';
 import {
   ButtonGroup,
@@ -153,10 +152,10 @@ class TorrentDetails extends Component {
     };
   }
 
-  renderHeader(active) {
+  renderHeader(selection) {
     return (
       <div>
-        <h3>{active.length} torrents</h3>
+        <h3>{selection.length} torrents</h3>
         <ButtonGroup>
           <button className="btn btn-default btn-sm">Pause all</button>
           <button className="btn btn-default btn-sm">Resume all</button>
@@ -178,16 +177,14 @@ class TorrentDetails extends Component {
   }
 
   render() {
-    const active = activeTorrents();
-    const { torrents } = this.props;
-    const { files } = this.props;
+    const { torrents, files, selection } = this.props;
     const _files = Object.values(files).reduce((s, f) => ({
       ...s, [f.torrent_id]: [...(s[f.torrent_id] || []), f]
     }), {});
     return (
       <div>
-        {active.length > 1 ? this.renderHeader(active) : null}
-        {active.map(id => <Torrent
+        {selection.length > 1 ? this.renderHeader(selection) : null}
+        {selection.map(id => <Torrent
           torrent={torrents[id]}
           files={_files[id] || []}
         />)}
@@ -199,5 +196,6 @@ class TorrentDetails extends Component {
 export default connect(state => ({
   router: state.router,
   torrents: state.torrents,
-  files: state.files
+  files: state.files,
+  selection: state.selection
 }))(TorrentDetails);

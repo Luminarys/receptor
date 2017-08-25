@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { activeTorrents, selectTorrent, selectop } from '../torrent_state';
+import selectTorrent, { UNION, SUBTRACT, EXCLUSIVE } from '../actions/selection';
 import { formatBitrate } from '../bitrate';
 
 class TorrentTable extends Component {
   render() {
-    const { torrents } = this.props;
-    const active = activeTorrents();
+    const { selection, torrents, dispatch } = this.props;
     return (
       <table className="table">
         <thead>
@@ -25,7 +24,7 @@ class TorrentTable extends Component {
               className={`torrent progress-row ${
                 t.status
               } ${
-                active.indexOf(t.id) !== -1 ? "selected" : ""
+                selection.indexOf(t.id) !== -1 ? "selected" : ""
               }`}
               style={{
                 backgroundSize: `${t.progress * 100}% 3px`
@@ -34,22 +33,20 @@ class TorrentTable extends Component {
               <td>
                 <input
                   type="checkbox"
-                  checked={active.indexOf(t.id) !== -1}
+                  checked={selection.indexOf(t.id) !== -1}
                   onChange={e =>
-                    selectTorrent(t,
-                      e.target.checked ? selectop.UNION : selectop.SUBTRACT)}
+                    dispatch(selectTorrent(t.id, e.target.checked ? UNION : SUBTRACT))
+                  }
                 />
               </td>
               <td>
                 <a
-                  href="#"
+                  href={`/torrents/${t.id}`}
                   onClick={e => {
                     e.preventDefault();
-                    selectTorrent(t, selectop.EXCLUSIVE);
+                    dispatch(selectTorrent(t.id, EXCLUSIVE));
                   }}
-                >
-                  {t.name}
-                </a>
+                >{t.name}</a>
               </td>
               <td>{formatBitrate(t.rate_up)}</td>
               <td>{formatBitrate(t.rate_down)}</td>
@@ -64,5 +61,6 @@ class TorrentTable extends Component {
 
 export default connect(state => ({
   torrents: state.torrents,
+  selection: state.selection,
   router: state.router
 }))(TorrentTable);
