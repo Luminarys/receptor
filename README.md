@@ -12,6 +12,7 @@ bug reports from right now and they know who they are.
 Run synapse on localhost with the default RPC port.
 
 ```shell
+$ git submodule update --init --recursive
 $ npm install
 $ npm start
 ```
