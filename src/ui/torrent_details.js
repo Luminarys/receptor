@@ -88,6 +88,10 @@ class Torrent extends Component {
           >
             {torrent.status === "paused" ? "Resume" : "Pause"}
           </button>
+          <button
+            className="btn btn-sm btn-very-sm btn-danger"
+            style={{marginLeft: "1rem"}}
+          >Remove</button>
         </p>
         <ButtonGroup>
           <CollapseToggle
@@ -158,8 +162,8 @@ class TorrentDetails extends Component {
               Remove
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem>Remove torrent</DropdownItem>
-              <DropdownItem>Delete files</DropdownItem>
+              <DropdownItem>Remove all selected torrents</DropdownItem>
+              <DropdownItem>Remove and delete files</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
         </ButtonGroup>
