@@ -88,3 +88,18 @@
     }
   }
 }
+
+.btn-very-sm {
+  padding: 0 0.75rem;
+  line-height: 1;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  .btn-group {
+    margin-bottom: 0;
+  }
+}

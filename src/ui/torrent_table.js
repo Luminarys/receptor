@@ -33,7 +33,7 @@ class TorrentTable extends Component {
           {Object.values(torrents).map(t =>
             <tr
               key={t.id}
-              className={`torrent ${
+              className={`torrent progress-row ${
                 t.status
               } ${
                 active.indexOf(t.id) !== -1 ? "selected" : ""
