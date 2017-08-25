@@ -203,10 +203,17 @@ class TorrentDetails extends Component {
     return (
       <div>
         {selection.length > 1 ? this.renderHeader(selection) : null}
-        {selection.map(id => <Torrent
+        {selection.slice(0, 3).map(id => <Torrent
           torrent={torrents[id]}
           files={_files[id] || []}
         />)}
+        {selection.length > 3 ?
+          <p class="text-center text-muted">
+            <strong>
+              ...{selection.length - 3} more hidden...
+            </strong>
+          </p>
+        : null}
       </div>
     );
   }
