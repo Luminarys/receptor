@@ -15,7 +15,7 @@ export default class Main extends Component {
         <div className="col-md-4">
           <Route path="/add-torrent" component={AddTorrent} />
           <Route path="/torrents/:ids" component={TorrentDetails} />
-          <Route path="/" component={Server} />
+          <Route exact path="/" component={Server} />
         </div>
       </div>
     );
