@@ -70,6 +70,12 @@ class Torrent extends Component {
     const { torrent, files } = this.props;
     const status = s => s[0].toUpperCase() + s.slice(1);
 
+    if (!torrent || !files) {
+      return (
+        <p>Loading...</p>
+      );
+    }
+
     return (
       <div>
         <h3>{torrent.name}</h3>

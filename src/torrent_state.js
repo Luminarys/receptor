@@ -12,7 +12,6 @@ export function activeTorrents() {
   }
 }
 
-// TODO: invoke on page load for /torrents/:id
 export function updateSubscriptions(added, removed) {
   if (added.length > 0) {
     added.forEach(t => {
