@@ -1,6 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-export default function add_torrent(props) {
+function torrent_details(props) {
   return (
     <div>
       <h3>Torrent details</h3>
@@ -8,3 +9,4 @@ export default function add_torrent(props) {
   );
 }
 
+export default connect(state => ({ router: state.router }))(torrent_details);

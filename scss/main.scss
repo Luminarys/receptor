@@ -37,6 +37,10 @@
     background-image: linear-gradient(to right, lighten($brand-success, 20), $brand-success);
   }
 
+  &.selected {
+    background-color: lighten($brand-warning, 20);
+  }
+
   background-repeat: no-repeat;
   background-position: left bottom;
 }

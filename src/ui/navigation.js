@@ -1,9 +1,9 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 export default function render(props) {
   return <nav className="navbar navbar-light navbar-toggleable-xl">
-    <span className="navbar-brand">receptor</span>
+    <Link to="/" className="navbar-brand">receptor</Link>
     <div className="navbar-collapse collapse">
       <ul className="navbar-nav mr-auto">
         <li className="nav-item">
