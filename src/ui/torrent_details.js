@@ -13,7 +13,7 @@ import {
   Progress
 } from 'reactstrap';
 import ws_send from '../socket';
-import selectTorrent, { UNION, NONE } from '../actions/selection';
+import selectTorrent, { EXCLUSIVE, UNION, NONE } from '../actions/selection';
 
 function File({ file }) {
   // TODO: show progress bar
@@ -153,12 +153,12 @@ class TorrentDetails extends Component {
     const { dispatch } = this.props;
     const { ids } = this.props.match.params;
     const _ids = ids.split(",");
-    _ids.forEach(id => dispatch(selectTorrent(id, UNION)));
+    dispatch(selectTorrent(_ids, UNION));
   }
 
   componentWillUnmount() {
     const { dispatch } = this.props;
-    dispatch(selectTorrent(null, NONE));
+    dispatch(selectTorrent([], EXCLUSIVE));
   }
 
   renderHeader(selection) {

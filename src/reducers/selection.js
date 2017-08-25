@@ -1,16 +1,14 @@
 import { UNION, SUBTRACT, EXCLUSIVE, NONE } from '../actions/selection';
 
 export default function selection(state = [], action) {
-  const { id } = action;
+  const { ids } = action;
   switch (action.type) {
     case UNION:
-      return [id, ...state.filter(t => t !== id)];
+      return [...ids, ...state.filter(id => ids.indexOf(id) === -1)];
     case SUBTRACT:
-      return state.filter(t => t !== id);
+      return state.filter(id => ids.indexOf(id) === -1);
     case EXCLUSIVE:
-      return [id];
-    case NONE:
-      return [];
+      return [...ids];
   }
   return state;
 }

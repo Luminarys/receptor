@@ -5,12 +5,11 @@ import { push } from 'react-router-redux';
 export const UNION = 'UNION';
 export const SUBTRACT = 'SUBTRACT';
 export const EXCLUSIVE = 'EXCLUSIVE';
-export const NONE = 'NONE';
 
-export default function selectTorrent(id, action) {
+export default function selectTorrent(ids, action) {
   return (dispatch, getState) => {
     const previous = new Set(getState().selection);
-    dispatch({ type: action, id });
+    dispatch({ type: action, ids });
 
     const state = getState();
     const next = new Set(state.selection);
@@ -23,7 +22,7 @@ export default function selectTorrent(id, action) {
 
     added.forEach(t => {
       const criteria = [
-        { field: "torrent_id", op: "==", value: id }
+        { field: "torrent_id", op: "==", value: t }
       ];
       dispatch(filter_subscribe("peer", criteria));
       dispatch(filter_subscribe("file", criteria));
@@ -38,7 +37,7 @@ export default function selectTorrent(id, action) {
         .map(sub => sub.serial);
       serials.forEach(serial => dispatch(filter_unsubscribe(serial)));
       /* Remove resource subscriptions */
-      const ids = [
+      const _ids = [
         ...Object.values(files)
           .filter(file => file.torrent_id === t)
           .map(file => file.id)
@@ -52,8 +51,8 @@ export default function selectTorrent(id, action) {
         //  .filter(piece => piece.torrent_id === t)
         //  .map(piece => piece.id),
       ];
-      if (ids.length > 0) {
-        dispatch(unsubscribe(...ids));
+      if (_ids.length > 0) {
+        dispatch(unsubscribe(..._ids));
       }
     });
 

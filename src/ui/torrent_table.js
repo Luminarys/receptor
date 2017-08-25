@@ -10,7 +10,19 @@ class TorrentTable extends Component {
       <table className="table">
         <thead>
           <tr>
-            <th style={{width: "1px"}}></th>
+            <th style={{width: "1px"}}>
+              <input
+                type="checkbox"
+                checked={selection.length === Object.values(torrents).length}
+                onChange={e => {
+                  if (selection.length > 0) {
+                    dispatch(selectTorrent([], EXCLUSIVE));
+                  } else {
+                    dispatch(selectTorrent(Object.keys(torrents), EXCLUSIVE));
+                  }
+                }}
+              />
+            </th>
             <th>name</th>
             <th>up</th>
             <th>down</th>
@@ -35,7 +47,7 @@ class TorrentTable extends Component {
                   type="checkbox"
                   checked={selection.indexOf(t.id) !== -1}
                   onChange={e =>
-                    dispatch(selectTorrent(t.id, e.target.checked ? UNION : SUBTRACT))
+                    dispatch(selectTorrent([t.id], e.target.checked ? UNION : SUBTRACT))
                   }
                 />
               </td>
@@ -44,7 +56,7 @@ class TorrentTable extends Component {
                   href={`/torrents/${t.id}`}
                   onClick={e => {
                     e.preventDefault();
-                    dispatch(selectTorrent(t.id, EXCLUSIVE));
+                    dispatch(selectTorrent([t.id], EXCLUSIVE));
                   }}
                 >{t.name}</a>
               </td>
