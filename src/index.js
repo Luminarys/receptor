@@ -1,8 +1,9 @@
 import "babel-polyfill";
 import React from 'react';
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
+import 'preact/devtools';
 
 import store, { history } from './store';
 import scss from '../scss/main.scss';
@@ -17,16 +18,21 @@ ws_init(() => {
   store.dispatch(filter_subscribe('server'));
 });
 
-render(
+const render = App => ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <div>
         <Nav />
         <div className="container">
-          <Main />
+          <App />
         </div>
       </div>
     </ConnectedRouter>
   </Provider>,
-  document.getElementById('root')
-);
+  document.getElementById('root'));
+
+render(Main);
+
+if (module.hot) {
+  module.hot.accept('./ui/main', () => render(Main));
+}

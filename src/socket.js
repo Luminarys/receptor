@@ -16,7 +16,7 @@ export default function ws_send(type, body, callback = null) {
     ...body
   };
   const msg = JSON.stringify(obj);
-  console.log("->", obj);
+  console.log("->", type, obj);
   ws.send(msg);
   return _serial;
 }
@@ -28,7 +28,7 @@ const handlers = {
 
 function ws_recv(e) {
   const msg = JSON.parse(e.data);
-  console.log("<-", msg);
+  console.log("<-", msg.type, msg);
   const cb = transactions[msg.serial];
   cb && cb(msg);
   const handler = handlers[msg.type];

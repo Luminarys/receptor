@@ -18,6 +18,14 @@ const store = createStore(
   _compose(applyMiddleware(thunk, routerMiddleware(history))),
 );
 
+if (module.hot) {
+  // Enable webpack hot module replacement for reducers
+  module.hot.accept(
+    './reducers',
+    () => store.replaceReducer(reducers)
+  );
+}
+
 export const dispatch = action => store.dispatch(action);
 export const getState = () => store.getState();
 

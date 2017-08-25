@@ -9,6 +9,7 @@ const defines = {
 module.exports = {
   devtool: "source-map",
   entry: [
+    'react-hot-loader/patch',
     "webpack-hot-middleware/client",
     "font-awesome-sass-loader!./font-awesome.config.js",
     "./src/index.js"
@@ -51,12 +52,14 @@ module.exports = {
   },
   plugins:[
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.EnvironmentPlugin(defines)
+    new webpack.EnvironmentPlugin(defines),
+    new webpack.NamedModulesPlugin(),
   ],
   resolve: {
     alias: {
       "react": "preact-compat",
-      "react-dom": "preact-compat"
+      "react-dom": "preact-compat",
+      "preact-compat": "preact-compat/dist/preact-compat"
     }
   }
 };
