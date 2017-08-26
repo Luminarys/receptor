@@ -6,6 +6,9 @@ import filter_subscribe from './filter_subscribe';
 import server from './server';
 import torrents from './torrents';
 import files from './files';
+import peers from './peers';
+import trackers from './trackers';
+import pieces from './pieces';
 
 const root = combineReducers({
   selection,
@@ -14,6 +17,9 @@ const root = combineReducers({
   server,
   torrents,
   files,
+  peers,
+  trackers,
+  pieces,
   router: routerReducer
 });
 

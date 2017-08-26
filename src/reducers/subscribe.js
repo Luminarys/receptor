@@ -1,4 +1,5 @@
 import { SUBSCRIBE, UNSUBSCRIBE } from '../actions/subscribe';
+import { RESOURCES_REMOVED } from '../actions/resources';
 
 export default function subscribe(state = [], action) {
   switch (action.type) {
@@ -10,6 +11,8 @@ export default function subscribe(state = [], action) {
       const { ids } = action;
       return state.filter(sub => ids.indexOf(sub.id) === -1);
     }
+    case RESOURCES_REMOVED:
+      return state.filter(sub => ids.indexOf(sub.id) === -1);
   }
   return state;
 }
