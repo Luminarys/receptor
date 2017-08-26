@@ -6,7 +6,7 @@ export const UNION = 'UNION';
 export const SUBTRACT = 'SUBTRACT';
 export const EXCLUSIVE = 'EXCLUSIVE';
 
-export default function selectTorrent(ids, action) {
+export default function selectTorrent(ids, action, navigate=true) {
   return (dispatch, getState) => {
     const previous = new Set(getState().selection);
     dispatch({ type: action, ids });
@@ -56,11 +56,13 @@ export default function selectTorrent(ids, action) {
       }
     });
 
-    const url_torrents = state.selection.slice(0, 3);
-    if (url_torrents.length > 0) {
-      dispatch(push(`/torrents/${url_torrents}`));
-    } else {
-      dispatch(push("/"));
+    if (navigate) {
+      const url_torrents = state.selection.slice(0, 3);
+      if (url_torrents.length > 0) {
+        dispatch(push(`/torrents/${url_torrents}`));
+      } else {
+        dispatch(push("/"));
+      }
     }
   };
 }

@@ -158,7 +158,7 @@ class TorrentDetails extends Component {
 
   componentWillUnmount() {
     const { dispatch } = this.props;
-    dispatch(selectTorrent([], EXCLUSIVE));
+    dispatch(selectTorrent([], EXCLUSIVE, false));
   }
 
   renderHeader(selection) {
