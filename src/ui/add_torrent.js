@@ -168,17 +168,54 @@ class AddTorrent extends Component {
     }
   }
 
+  applyOptions(id) {
+    const {
+      priority,
+      uploadThrottle,
+      downloadThrottle
+    } = this.state;
+    const { dispatch } = this.props;
+    const customize = // TODO: File options
+      priority !== 3 ||
+      uploadThrottle !== -1 ||
+      downloadThrottle !== -1;
+    if (!customize) {
+      dispatch(push(`/torrents/${id}`));
+      return;
+    }
+    ws_send("UPDATE_RESOURCE", {
+      resource: {
+        id,
+        priority,
+        throttle_up: uploadThrottle,
+        throttle_down: downloadThrottle
+      }
+    }, async done => {
+      if (this.state.startImmediately) {
+        ws_send("RESUME_TORRENT", { id });
+      }
+      dispatch(push(`/torrents/${id}`));
+    });
+  }
+
   uploadFile() {
     this.setState({ loading: true });
-    const { file } = this.state;
+    const { file, startImmediately } = this.state;
     const { dispatch } = this.props;
-    ws_send("UPLOAD_TORRENT", { size: file.size }, async offer => {
+    const customize = // TODO: File options
+      this.state.priority !== 3 ||
+      this.state.uploadThrottle !== -1 ||
+      this.state.downloadThrottle !== -1;
+    ws_send("UPLOAD_TORRENT", {
+      size: file.size,
+      start: startImmediately && !customize
+    }, async offer => {
       switch (offer.type) {
         case "TRANSFER_OFFER":
           return await this.handleTransferOffer(offer, file);
         case "RESOURCES_EXTANT":
           const [id] = offer.ids;
-          dispatch(push(`/torrents/${id}`));
+          this.applyOptions.bind(this)(id);
           break;
       }
     });
