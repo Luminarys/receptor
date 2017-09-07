@@ -31,8 +31,22 @@ class Throttle extends Component {
 
   invokeChange() {
     const { onChange } = this.props;
+    if (!onChange) {
+      return;
+    }
+
     const { strategy, limit, unit } = this.state;
-    this.onChange && this.onChange(strategy, convertToBitrate(limit, unit));
+    switch (strategy) {
+      case "global":
+        onChange(null);
+        break;
+      case "unlimited":
+        onChange(-1);
+        break;
+      default:
+        onChange(convertToBitrate(limit, unit));
+        break;
+    }
   }
 
   setStrategy(strategy) {
@@ -132,7 +146,10 @@ class AddTorrent extends Component {
       file: null,
       torrent: null,
       files: [],
-      startImmediately: true
+      startImmediately: true,
+      uploadThrottle: -1,
+      downloadThrottle: -1,
+      priority: 3,
     };
   }
 
@@ -218,16 +235,31 @@ class AddTorrent extends Component {
           </FormGroup>
           <FormGroup>
             <Label for="priority">Priority</Label>
-            <Input type="select" id="priority" value={3}>
-              <option value={1}>Lowest</option>
-              <option value={2}>Low</option>
-              <option value={3}>Normal</option>
-              <option value={4}>High</option>
-              <option value={5}>Highest</option>
+            <Input
+              type="select"
+              id="priority"
+              value={this.state.priority}
+              onChange={e =>
+                this.setState({ priority: parseInt(e.target.value)})
+              }
+            >
+              <option value="1">Lowest</option>
+              <option value="2">Low</option>
+              <option value="3">Normal</option>
+              <option value="4">High</option>
+              <option value="5">Highest</option>
             </Input>
           </FormGroup>
-          <Throttle for="dl-throttle" legend="Download throttle" />
-          <Throttle for="ul-throttle" legend="Upload throttle" />
+          <Throttle
+            prop="dl-throttle"
+            legend="Download throttle"
+            onChange={limit => this.setState({ downloadThrottle: limit })}
+          />
+          <Throttle
+            prop="ul-throttle"
+            legend="Upload throttle"
+            onChange={limit => this.setState({ uploadThrottle: limit })}
+          />
         </CardBlock>
       </Card>
     );
