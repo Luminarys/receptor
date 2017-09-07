@@ -49,6 +49,12 @@
   background-position: left bottom;
 }
 
+input[type="text"], input[type="number"] {
+  padding: 0.05rem 0.25rem;
+  border-radius: 0;
+  border-color: #888;
+}
+
 .navbar {
   input[type="text"] {
     margin-top: 7px;
@@ -102,4 +108,29 @@
   .btn-group {
     margin-bottom: 0;
   }
+}
+
+.card {
+  .card {
+    border-left: none;
+    border-right: none;
+  }
+
+  .form-group {
+    margin-bottom: 0.25rem;
+  }
+}
+
+select.form-control {
+  height: 1.5rem !important;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.form-check-input:only-child {
+  position: absolute;
+}
+
+.form-check-inline {
+  margin-bottom: 0;
 }
