@@ -13,7 +13,8 @@ export default class Main extends Component {
           <TorrentTable />
         </div>
         <div className="col-md-4">
-          <Route path="/add-torrent" component={AddTorrent} />
+          <Route exact path="/add-torrent" component={AddTorrent} />
+          <Route path="/add-torrent/:magnet" component={AddTorrent} />
           <Route path="/torrents/:ids" component={TorrentDetails} />
           <Route exact path="/" component={Server} />
         </div>

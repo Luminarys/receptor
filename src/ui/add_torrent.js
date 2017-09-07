@@ -144,6 +144,8 @@ class AddTorrent extends Component {
       loading: false,
       customize: false,
       file: null,
+      magnet: null,
+      useMagnet: false,
       torrent: null,
       files: [],
       startImmediately: true,
@@ -151,6 +153,14 @@ class AddTorrent extends Component {
       downloadThrottle: -1,
       priority: 3,
     };
+  }
+
+  componentDidMount() {
+    let { magnet } = this.props.match.params;
+    if (magnet) {
+      magnet = decodeURIComponent(magnet);
+      this.setState({ magnet, useMagnet: true });
+    }
   }
 
   async handleTransferOffer(offer, file) {
@@ -200,16 +210,13 @@ class AddTorrent extends Component {
 
   uploadFile() {
     this.setState({ loading: true });
-    const { file, startImmediately } = this.state;
+    const { magnet, file, startImmediately } = this.state;
     const { dispatch } = this.props;
     const customize = // TODO: File options
       this.state.priority !== 3 ||
       this.state.uploadThrottle !== -1 ||
       this.state.downloadThrottle !== -1;
-    ws_send("UPLOAD_TORRENT", {
-      size: file.size,
-      start: startImmediately && !customize
-    }, async offer => {
+    const handleOffer = async offer => {
       switch (offer.type) {
         case "TRANSFER_OFFER":
           return await this.handleTransferOffer(offer, file);
@@ -218,7 +225,18 @@ class AddTorrent extends Component {
           this.applyOptions.bind(this)(id);
           break;
       }
-    });
+    };
+    if (magnet) {
+      ws_send("UPLOAD_MAGNET", {
+        uri: magnet,
+        start: startImmediately && !customize
+      }, handleOffer);
+    } else {
+      ws_send("UPLOAD_TORRENT", {
+        size: file.size,
+        start: startImmediately && !customize
+      }, handleOffer);
+    }
   }
 
   processTorrent(torrent) {
@@ -303,7 +321,7 @@ class AddTorrent extends Component {
   }
 
   renderTorrent() {
-    const { torrent, file, files, loading } = this.state;
+    const { magnet, torrent, file, files, loading } = this.state;
 
     const details = {
       "comment": d => d,
@@ -313,35 +331,39 @@ class AddTorrent extends Component {
 
     return (
       <Card style={{marginBottom: "1rem"}}>
-        <CardBlock>
-          <CardTitle>{file.name}</CardTitle>
-          <CardText>
-            <dl style={{marginBottom: "0"}}>
-              {Object.keys(details).map(key =>
-                torrent[key] && (
-                  <div>
-                    <dt>{key}</dt>
-                    <dd>{details[key](torrent[key])}</dd>
-                  </div>
-                )
-              )}
-            </dl>
-          </CardText>
-        </CardBlock>
+        {torrent &&
+          <CardBlock>
+            <CardTitle>{magnet && "Magnet link" || file.name}</CardTitle>
+              <CardText>
+              <dl style={{marginBottom: "0"}}>
+                {Object.keys(details).map(key =>
+                  torrent[key] && (
+                    <div>
+                      <dt>{key}</dt>
+                      <dd>{details[key](torrent[key])}</dd>
+                    </div>
+                  )
+                )}
+              </dl>
+            </CardText>
+          </CardBlock>
+        }
         <ToggleContainer className="form-group" title="Options">
           {this.renderOptions.bind(this)()}
         </ToggleContainer>
-        <ToggleContainer className="form-group" title="Files">
-          <Card>
-            <CardBlock>
-              TODO
-            </CardBlock>
-          </Card>
-        </ToggleContainer>
+        {torrent &&
+          <ToggleContainer className="form-group" title="Files">
+            <Card>
+              <CardBlock>
+                TODO
+              </CardBlock>
+            </Card>
+          </ToggleContainer>
+        }
         <button
           type="button"
           className="btn btn-primary btn-block"
-          disabled={file === null || loading}
+          disabled={(file || magnet) && loading}
           onClick={this.uploadFile.bind(this)}
         >Add torrent</button>
         {loading ?
@@ -360,7 +382,14 @@ class AddTorrent extends Component {
     return (
       <div>
         <h3>Add torrent</h3>
-        {this.state.torrent && this.renderTorrent.bind(this)()}
+        {this.state.magnet && this.state.useMagnet &&
+          <p style={{
+            textOverflow: "ellipsis",
+            overflowX: "hidden",
+            whiteSpace: "nowrap"
+          }}>{this.state.magnet}</p>
+        }
+        {(this.state.torrent || this.state.magnet) && this.renderTorrent.bind(this)()}
         <div className="form-group">
           <input
             style={{display: "none"}}
@@ -368,7 +397,7 @@ class AddTorrent extends Component {
             accept=".torrent"
             onChange={this.handleFile.bind(this)}
           />
-          {this.state.torrent ?
+          {!this.state.useMagnet && (this.state.torrent ?
             <div style={{
               display: "flex",
               flexDirection: "column",
@@ -381,12 +410,35 @@ class AddTorrent extends Component {
               >Select a different torrent?</button>
             </div>
           :
-            <button
-              type="button"
-              className="btn btn-default btn-block"
-              onClick={() => findDOMNode(this).querySelector("input[type='file']").click()}
-            >Select torrent</button>
-          }
+            <div>
+              <button
+                type="button"
+                className="btn btn-default btn-block"
+                onClick={() => findDOMNode(this).querySelector("input[type='file']").click()}
+              >Select torrent</button>
+              <div className="text-centered" style={{margin: "1rem auto"}}>
+                - or -
+              </div>
+              <FormGroup>
+                <Input
+                  type="text"
+                  placeholder="Magnet link"
+                  value={this.state.magnet}
+                  onChange={e => this.setState({ magnet: e.target.value })}
+                />
+              </FormGroup>
+              <button
+                type="button"
+                className="btn btn-default btn-block"
+                onClick={() => this.setState({ useMagnet: true })}
+                disabled={(() => {
+                  const a = document.createElement("a");
+                  a.href = this.state.magnet;
+                  return a.protocol !== "magnet:";
+                })()}
+              >Add magnet</button>
+            </div>
+          )}
         </div>
       </div>
     );
