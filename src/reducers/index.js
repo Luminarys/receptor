@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux'
+import socket from './socket';
 import selection from './selection';
 import subscribe from './subscribe';
 import filter_subscribe from './filter_subscribe';
@@ -11,6 +12,7 @@ import trackers from './trackers';
 import pieces from './pieces';
 
 const root = combineReducers({
+  socket,
   selection,
   subscribe,
   filter_subscribe,

@@ -10,29 +10,33 @@ import store, { history } from './store';
 import scss from '../scss/main.scss';
 import { ws_init } from './socket';
 import { filter_subscribe } from './actions/filter_subscribe';
+import { socket_connected, socket_disconnected } from './actions/socket';
 
 import Nav from './ui/navigation';
 import Main from './ui/main';
 import Connection from './ui/connection';
 
 const root = document.getElementById('root');
-ReactDOM.render(<Connection />, root);
 
-ws_init(() => {
-  store.dispatch(filter_subscribe());
-  store.dispatch(filter_subscribe('server'));
-  ReactDOM.render(
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <div>
-          <Nav />
-          <div className="container">
-            <Main />
-          </div>
+export function initialize(uri) {
+  ws_init(uri, () => {
+    store.dispatch(socket_connected());
+    store.dispatch(filter_subscribe());
+    store.dispatch(filter_subscribe('server'));
+  });
+}
+
+ReactDOM.render(
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <div>
+        <Nav />
+        <div className="container">
+          <Main />
         </div>
-      </ConnectedRouter>
-    </Provider>, root);
-});
+      </div>
+    </ConnectedRouter>
+  </Provider>, root);
 
 navigator.registerProtocolHandler("magnet",
   window.location.origin + "/add-torrent/%s",

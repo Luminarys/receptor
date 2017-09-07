@@ -49,6 +49,22 @@
   background-position: left bottom;
 }
 
+.connection-overlay {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+
+  .card {
+    min-width: 20rem;
+  }
+}
+
 input[type="text"], input[type="number"] {
   padding: 0.05rem 0.25rem;
   border-radius: 0;
@@ -127,7 +143,7 @@ select.form-control {
   font-size: 0.9rem;
 }
 
-.form-check-input:only-child {
+fieldset .form-check-input:only-child {
   position: absolute;
 }
 
