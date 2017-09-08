@@ -6,21 +6,25 @@ import { ConnectedRouter } from 'react-router-redux';
 import 'preact/devtools';
 import './polyfills';
 
-import store, { history } from './store';
+import store, { create, history } from './store';
 import scss from '../scss/main.scss';
 import { ws_init } from './socket';
 import { filter_subscribe } from './actions/filter_subscribe';
-import { socket_connected, socket_disconnected } from './actions/socket';
+import { socket_update, SOCKET_STATE } from './actions/socket';
 
 import Nav from './ui/navigation';
 import Main from './ui/main';
 import Connection from './ui/connection';
 
 export function initialize(uri) {
+  store.dispatch(socket_update(SOCKET_STATE.CONNECTING));
   ws_init(uri, () => {
-    store.dispatch(socket_connected());
+    store.dispatch(socket_update(SOCKET_STATE.CONNECTED));
     store.dispatch(filter_subscribe());
     store.dispatch(filter_subscribe('server'));
+  }, () => {
+    store.dispatch(socket_update(SOCKET_STATE.DISCONNECTED,
+      "You were disconnected."));
   });
 }
 

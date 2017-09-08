@@ -13,10 +13,16 @@ export const history = createHistory();
 const _compose =
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   || compose;
-const store = createStore(
-  reducer,
-  _compose(applyMiddleware(thunk, routerMiddleware(history))),
-);
+
+let store;
+
+export const create = () => {
+  store = createStore(
+    reducer,
+    _compose(applyMiddleware(thunk, routerMiddleware(history))),
+  );
+};
+create();
 
 if (module.hot) {
   // Enable webpack hot module replacement for reducers

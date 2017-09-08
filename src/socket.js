@@ -35,9 +35,9 @@ function ws_recv(e) {
   handler && handler(msg);
 }
 
-export function ws_init(uri, cb) {
+export function ws_init(uri, open, close) {
   ws = new WebSocket(uri);
-  ws.addEventListener("open", cb);
+  ws.addEventListener("open", open);
   ws.addEventListener("message", ws_recv);
-  ws.addEventListener("close", () => console.log("ws closed"));
+  ws.addEventListener("close", close);
 }

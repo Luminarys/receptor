@@ -1,12 +1,14 @@
-import { SOCKET_CONNECTED, SOCKET_DISCONNECTED } from '../actions/socket';
+import { SOCKET_STATE, SOCKET_UPDATE } from '../actions/socket';
 
-export default function socket(state = { connected: false }, action) {
+export default function socket(_state = {
+  state: SOCKET_STATE.DISCONNECTED,
+  reason: null
+}, action) {
+  const { state, reason } = action;
   switch (action.type) {
-    case SOCKET_CONNECTED:
-      return { ...state, connected: true };
-    case SOCKET_DISCONNECTED:
-      return { ...state, connected: false };
+    case SOCKET_UPDATE:
+      return { ..._state, state, reason };
     default:
-      return state;
+      return _state;
   }
 }

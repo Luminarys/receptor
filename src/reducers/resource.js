@@ -1,4 +1,5 @@
 import { UPDATE_RESOURCES, RESOURCES_REMOVED } from '../actions/resources';
+import { SOCKET_STATE, SOCKET_UPDATE } from '../actions/socket';
 
 export default function resourceReducer(type) {
   return (state = {}, action) => {
@@ -17,6 +18,9 @@ export default function resourceReducer(type) {
         return Object.values(state)
           .filter(r => action.ids.indexOf(r.id) === -1)
           .reduce((s, r) => ({ ...s, [r.id]: r }), {});
+      case SOCKET_UPDATE:
+        const _state = action.state;
+        return _state === SOCKET_STATE.CONNECTING ? {} : state;
     }
     return state;
   };

@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
+  Alert,
   Card,
   CardHeader,
   CardBlock,
   FormGroup,
+  Progress,
   Label,
   Input
 } from 'reactstrap';
 import { initialize } from '..';
+import { SOCKET_STATE } from '../actions/socket';
 
 class ConnectionOverlay extends Component {
   constructor() {
@@ -25,8 +28,21 @@ class ConnectionOverlay extends Component {
 
   render() {
     const { socket } = this.props;
-    if (socket.connected) {
+    if (socket.state === SOCKET_STATE.CONNECTED) {
       return null;
+    }
+    if (socket.state === SOCKET_STATE.CONNECTING) {
+      return (
+        <div className="connection-overlay">
+          <Card>
+            <CardHeader>Connect to synapse</CardHeader>
+            <CardBlock>
+              <p className="text-center">Connecting...</p>
+              <Progress value={100} animated />
+            </CardBlock>
+          </Card>
+        </div>
+      );
     }
     const { uri, autoconnect } = this.state;
     return (
@@ -34,6 +50,7 @@ class ConnectionOverlay extends Component {
         <Card>
           <CardHeader>Connect to synapse</CardHeader>
           <CardBlock>
+            {socket.reason && <Alert color="info">{socket.reason}</Alert>}
             <FormGroup>
               <Label for="socket-uri">Server URI</Label>
               <Input
@@ -56,7 +73,7 @@ class ConnectionOverlay extends Component {
             <button
               className="btn btn-primary"
               onClick={() => initialize(this.state.uri)}
-            >Connect</button>
+            >{socket.reason ? "Reconnect" : "Connect"}</button>
           </CardBlock>
         </Card>
       </div>
