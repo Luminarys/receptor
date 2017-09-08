@@ -254,7 +254,10 @@ class AddTorrent extends Component {
         torrent
       });
     } else {
-      // TODO
+      this.setState({
+        files: [/* TODO */],
+        torrent
+      });
     }
   }
 
