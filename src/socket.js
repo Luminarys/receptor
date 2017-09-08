@@ -4,6 +4,8 @@ import { subscribe } from './actions/subscribe';
 let ws;
 let serial = 0;
 let transactions = {};
+let connected = false;
+let queue = [];
 
 export default function ws_send(type, body, callback = null) {
   const _serial = serial++;
@@ -17,7 +19,11 @@ export default function ws_send(type, body, callback = null) {
   };
   const msg = JSON.stringify(obj);
   console.log("->", type, obj);
-  ws.send(msg);
+  if (!connected) {
+    queue.push(msg);
+  } else {
+    ws.send(msg);
+  }
   return _serial;
 }
 
@@ -37,9 +43,18 @@ function ws_recv(e) {
 
 export function ws_init(uri, open, close) {
   ws = new WebSocket(uri);
-  ws.addEventListener("open", open);
+  ws.addEventListener("open", () => {
+    connected = true;
+    open.apply(this, arguments);
+    while (queue.length > 0) {
+      ws.send(queue.pop());
+    }
+  });
   ws.addEventListener("message", ws_recv);
-  ws.addEventListener("close", close);
+  ws.addEventListener("close", () => {
+    connected = false;
+    close.apply(this, arguments);
+  });
 }
 
 export function ws_disconnect() {

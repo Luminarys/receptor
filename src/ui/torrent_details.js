@@ -36,7 +36,7 @@ function CollapseToggle({ text, onToggle, open }) {
     >
       {text}
       <FontAwesome
-        name={`chevron-${open ? "up" : "down"}`}
+        name={`caret-${open ? "up" : "down"}`}
         style={{marginLeft: "0.25rem"}}
       />
     </button>
