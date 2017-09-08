@@ -29,7 +29,8 @@ export default function ws_send(type, body, callback = null) {
 
 const handlers = {
   RESOURCES_EXTANT: msg => dispatch(subscribe(...msg.ids)),
-  UPDATE_RESOURCES: msg => dispatch(msg)
+  UPDATE_RESOURCES: msg => dispatch(msg),
+  RESOURCES_REMOVED: msg => dispatch(msg),
 };
 
 function ws_recv(e) {

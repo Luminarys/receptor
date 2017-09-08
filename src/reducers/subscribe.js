@@ -11,8 +11,10 @@ export default function subscribe(state = [], action) {
       const { ids } = action;
       return state.filter(sub => ids.indexOf(sub.id) === -1);
     }
-    case RESOURCES_REMOVED:
+    case RESOURCES_REMOVED: {
+      const { ids } = action;
       return state.filter(sub => ids.indexOf(sub.id) === -1);
+    }
   }
   return state;
 }

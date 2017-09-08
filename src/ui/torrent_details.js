@@ -13,7 +13,12 @@ import {
   Progress
 } from 'reactstrap';
 import ws_send from '../socket';
-import selectTorrent, { EXCLUSIVE, UNION, NONE } from '../actions/selection';
+import selectTorrent, {
+  EXCLUSIVE,
+  UNION,
+  SUBTRACT,
+  NONE
+} from '../actions/selection';
 
 function File({ file }) {
   // TODO: show progress bar
@@ -64,7 +69,7 @@ class Torrent extends Component {
   }
 
   render() {
-    const { torrent, files } = this.props;
+    const { dispatch, torrent, files } = this.props;
     const status = s => s[0].toUpperCase() + s.slice(1);
 
     if (!torrent || !files) {
@@ -100,7 +105,12 @@ class Torrent extends Component {
               Remove
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem>Remove</DropdownItem>
+              <DropdownItem
+                onClick={() => {
+                  dispatch(selectTorrent([torrent.id], SUBTRACT));
+                  ws_send("REMOVE_RESOURCE", { id: torrent.id });
+                }}
+              >Remove</DropdownItem>
               <DropdownItem>Remove and delete files</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
@@ -171,7 +181,8 @@ class TorrentDetails extends Component {
     dispatch(selectTorrent([], EXCLUSIVE, false));
   }
 
-  renderHeader(selection) {
+  renderHeader() {
+    const { dispatch, selection } = this.props;
     return (
       <div>
         <h3>
@@ -201,7 +212,12 @@ class TorrentDetails extends Component {
                 Remove all
               </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem>Remove selected torrents</DropdownItem>
+                <DropdownItem
+                  onClick={() => {
+                    dispatch(selectTorrent(selection, SUBTRACT));
+                    selection.forEach(id => ws_send("REMOVE_RESOURCE", { id }));
+                  }}
+                >Remove selected torrents</DropdownItem>
                 <DropdownItem>Remove selected torrents and delete files</DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>
@@ -212,14 +228,15 @@ class TorrentDetails extends Component {
   }
 
   render() {
-    const { torrents, files, selection } = this.props;
+    const { torrents, files, selection, dispatch } = this.props;
     const _files = Object.values(files).reduce((s, f) => ({
       ...s, [f.torrent_id]: [...(s[f.torrent_id] || []), f]
     }), {});
     return (
       <div>
-        {selection.length > 1 ? this.renderHeader(selection) : null}
+        {selection.length > 1 ? this.renderHeader.bind(this)() : null}
         {selection.slice(0, 3).map(id => <Torrent
+          dispatch={dispatch}
           torrent={torrents[id]}
           files={_files[id] || []}
         />)}
