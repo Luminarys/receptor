@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { formatBitrate } from '../bitrate';
 import { ws_disconnect } from '../socket';
+import date from '../date';
 
 const throttle = _ => _ === null ? "Unlimited" : formatBitrate(_);
 
@@ -23,8 +25,7 @@ function Server({ server }) {
       </h3>
       <dl>
         <dt>Running since</dt>
-        {/* TODO: pretty print dates */}
-        <dd>{server.started}</dd>
+        <dd>{date(moment(server.started))}</dd>
         <dt>Rate up</dt>
         <dd>{formatBitrate(server.rate_up)}</dd>
         <dt>Rate down</dt>

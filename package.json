@@ -43,6 +43,7 @@
     "font-awesome-sass-loader": "^2.0.1",
     "history": "^4.7.2",
     "isomorphic-fetch": "^2.2.1",
+    "moment": "^2.18.1",
     "node-sass": "^4.5.3",
     "preact": "^8.2.4",
     "preact-compat": "^3.17.0",
