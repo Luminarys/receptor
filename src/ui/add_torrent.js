@@ -341,14 +341,21 @@ class AddTorrent extends Component {
             <CardTitle>{magnet && "Magnet link" || file.name}</CardTitle>
               <CardText>
               <dl style={{marginBottom: "0"}}>
-                {Object.keys(details).map(key =>
-                  torrent[key] && (
+                {Object.keys(details).map(key => {
+                  const val = torrent[key];
+                  if (!val) {
+                    return null;
+                  }
+                  if (typeof val === "string" && !val.trim()) {
+                    return null;
+                  }
+                  return (
                     <div>
                       <dt>{key}</dt>
                       <dd>{details[key](torrent[key])}</dd>
                     </div>
-                  )
-                )}
+                  );
+                })}
               </dl>
             </CardText>
           </CardBlock>
