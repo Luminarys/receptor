@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { formatBitrate } from '../bitrate';
+import { ws_disconnect } from '../socket';
 
-function throttle(v) {
-  return v === null ? "Unlimited" : formatBitrate(v);
-}
+const throttle = _ => _ === null ? "Unlimited" : formatBitrate(_);
 
 function Server({ server }) {
   if (!server.id) {
-    // TODO: websocket status?
     return null;
   }
   return (
     <div>
-      <h3>Server</h3>
+      <h3>
+        Server
+        <button
+          className="btn btn-sm btn-outline-danger pull-right"
+          onClick={() => {
+            localStorage.removeItem("autoconnect");
+            ws_disconnect();
+          }}
+        >Disconnect</button>
+      </h3>
       <dl>
         <dt>Running since</dt>
         {/* TODO: pretty print dates */}

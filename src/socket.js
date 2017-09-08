@@ -41,3 +41,7 @@ export function ws_init(uri, open, close) {
   ws.addEventListener("message", ws_recv);
   ws.addEventListener("close", close);
 }
+
+export function ws_disconnect() {
+  ws.close();
+}

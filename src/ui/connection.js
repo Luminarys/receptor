@@ -16,14 +16,18 @@ import { SOCKET_STATE } from '../actions/socket';
 class ConnectionOverlay extends Component {
   constructor() {
     super();
-    this.state = {
-      uri: "ws://127.0.0.1:8412",
-      autoconnect: false,
-      connecting: false
-    };
-    // TODO: "connecting..." UI
-    // TODO: autoconnect
-    // TODO: gracefully handle dis/reconnections
+    const uri = localStorage.getItem("autoconnect");
+    this.state = { uri: uri || "ws://127.0.0.1:8412", autoconnect: !!uri };
+    if (uri) {
+      initialize(this.state.uri);
+    }
+  }
+
+  connect() {
+    if (this.state.autoconnect) {
+      localStorage.setItem("autoconnect", this.state.uri);
+    }
+    initialize(this.state.uri);
   }
 
   render() {
@@ -72,7 +76,7 @@ class ConnectionOverlay extends Component {
             </FormGroup>
             <button
               className="btn btn-primary"
-              onClick={() => initialize(this.state.uri)}
+              onClick={this.connect.bind(this)}
             >{socket.reason ? "Reconnect" : "Connect"}</button>
           </CardBlock>
         </Card>
