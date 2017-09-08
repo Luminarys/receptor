@@ -168,12 +168,19 @@ class AddTorrent extends Component {
   async handleTransferOffer(offer, file) {
     const headers = new Headers();
     headers.append("Authorization", "Bearer " + offer.token);
+    const { socket } = this.props;
+    console.log(socket);
+    const a = document.createElement('a');
+    a.href = socket.uri;
+    const url = (a.protocol === "ws:" ? "http://" : "https://") + a.host;
     try {
-      const resp = await fetch('http://localhost:8412/', {
-        method: 'POST',
-        body: file,
-        headers: headers
-      });
+      const resp = await fetch(url,
+        {
+          method: 'POST',
+          body: file,
+          headers: headers
+        }
+      );
     } catch (ex) {
       // TODO: something more useful
       console.log(ex);
@@ -457,4 +464,4 @@ class AddTorrent extends Component {
   }
 }
 
-export default connect()(AddTorrent);
+export default connect(s => ({ socket: s.socket }))(AddTorrent);

@@ -10,13 +10,14 @@ import store, { create, history } from './store';
 import scss from '../scss/main.scss';
 import { ws_init } from './socket';
 import { filter_subscribe } from './actions/filter_subscribe';
-import { socket_update, SOCKET_STATE } from './actions/socket';
+import { socket_uri, socket_update, SOCKET_STATE } from './actions/socket';
 
 import Nav from './ui/navigation';
 import Main from './ui/main';
 import Connection from './ui/connection';
 
 export function initialize(uri) {
+  store.dispatch(socket_uri(uri));
   store.dispatch(socket_update(SOCKET_STATE.CONNECTING));
   ws_init(uri, () => {
     store.dispatch(socket_update(SOCKET_STATE.CONNECTED));
