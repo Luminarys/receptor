@@ -16,8 +16,6 @@ import Nav from './ui/navigation';
 import Main from './ui/main';
 import Connection from './ui/connection';
 
-const root = document.getElementById('root');
-
 export function initialize(uri) {
   ws_init(uri, () => {
     store.dispatch(socket_connected());
@@ -36,7 +34,7 @@ ReactDOM.render(
         </div>
       </div>
     </ConnectedRouter>
-  </Provider>, root);
+  </Provider>, document.getElementById('root'));
 
 navigator.registerProtocolHandler("magnet",
   window.location.origin + "/add-torrent/%s",

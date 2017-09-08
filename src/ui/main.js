@@ -7,7 +7,7 @@ import TorrentDetails from './torrent_details';
 import Server from './server';
 import ConnectionOverlay from './connection';
 
-class Main extends Component {
+export default class Main extends Component {
   render() {
     return (
       <div className="row">
@@ -20,10 +20,8 @@ class Main extends Component {
           <Route path="/torrents/:ids" component={TorrentDetails} />
           <Route exact path="/" component={Server} />
         </div>
-        {this.props.socket.connected || <ConnectionOverlay />}
+        <ConnectionOverlay />
       </div>
     );
   }
 }
-
-export default connect(state => ({ socket: state.socket }))(Main);

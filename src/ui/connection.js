@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   Card,
   CardHeader,
@@ -9,7 +10,7 @@ import {
 } from 'reactstrap';
 import { initialize } from '..';
 
-export default class ConnectionOverlay extends Component {
+class ConnectionOverlay extends Component {
   constructor() {
     super();
     this.state = {
@@ -23,6 +24,10 @@ export default class ConnectionOverlay extends Component {
   }
 
   render() {
+    const { socket } = this.props;
+    if (socket.connected) {
+      return null;
+    }
     const { uri, autoconnect } = this.state;
     return (
       <div className="connection-overlay">
@@ -58,3 +63,5 @@ export default class ConnectionOverlay extends Component {
     );
   }
 }
+
+export default connect(state => ({ socket: state.socket }))(ConnectionOverlay);
