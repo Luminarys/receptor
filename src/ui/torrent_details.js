@@ -50,7 +50,8 @@ class Torrent extends Component {
       infoShown: false,
       filesShown: false,
       trackersShown: false,
-      peersShown: false
+      peersShown: false,
+      removeDropdown: false
     };
   }
 
@@ -74,27 +75,36 @@ class Torrent extends Component {
 
     return (
       <div>
-        <h3>{torrent.name}</h3>
-        <Progress value={torrent.progress * 100} style={{marginBottom: "0.5rem"}}>
-          {(torrent.progress * 100).toFixed(0)}%
-        </Progress>
-        <p>
-          <strong>State:</strong>
-          <span style={{marginLeft: "1rem"}}>
-            {status(torrent.status)}
-          </span>
-          <button
-            className="btn btn-sm btn-very-sm btn-info"
-            style={{marginLeft: "1rem"}}
-            onClick={() => this.toggleTorrentState(torrent)}
+        <h4>{torrent.name}</h4>
+        <div className="torrent-controls">
+          <a
+            href="#"
+            style={{margin: "auto 0.5rem"}}
+            title={torrent.status === "paused" ? "Resume" : "Pause"}
+            onClick={e => {
+              e.preventDefault();
+              this.toggleTorrentState(torrent);
+            }}
           >
-            {torrent.status === "paused" ? "Resume" : "Pause"}
-          </button>
-          <button
-            className="btn btn-sm btn-very-sm btn-danger"
-            style={{marginLeft: "1rem"}}
-          >Remove</button>
-        </p>
+            <FontAwesome name={torrent.status === "paused" ? "play" : "pause"} />
+          </a>
+          <div class="status">{status(torrent.status)}</div>
+          <Progress
+            value={torrent.progress * 100}
+          >{(torrent.progress * 100).toFixed(0)}%</Progress>
+          <ButtonDropdown
+            isOpen={this.state.removeDropdown}
+            toggle={() => this.setState({ removeDropdown: !this.state.removeDropdown })}
+          >
+            <DropdownToggle color="danger" caret>
+              Remove
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem>Remove</DropdownItem>
+              <DropdownItem>Remove and delete files</DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
+        </div>
         <ButtonGroup>
           <CollapseToggle
             text="Info"
@@ -164,33 +174,39 @@ class TorrentDetails extends Component {
   renderHeader(selection) {
     return (
       <div>
-        <h3>{selection.length} torrents</h3>
-        <ButtonGroup>
-          <button
-            className="btn btn-default btn-sm"
-            onClick={() => {
-              selection.forEach(id => ws_send("PAUSE_TORRENT", { id }));
-            }}
-          >Pause all</button>
-          <button
-            className="btn btn-default btn-sm"
-            onClick={() => {
-              selection.forEach(id => ws_send("RESUME_TORRENT", { id }));
-            }}
-          >Resume all</button>
-          <ButtonDropdown
-            isOpen={this.state.removeDropdown}
-            toggle={() => this.setState({ removeDropdown: !this.state.removeDropdown })}
-          >
-            <DropdownToggle color="default" caret>
-              Remove
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem>Remove all selected torrents</DropdownItem>
-              <DropdownItem>Remove and delete files</DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
-        </ButtonGroup>
+        <h3>
+          {selection.length} torrents
+          <div className="bulk-controls">
+            <a
+              href="#"
+              title="Resume all"
+              onClick={e => {
+                e.preventDefault();
+                selection.forEach(id => ws_send("RESUME_TORRENT", { id }));
+              }}
+            ><FontAwesome name="play" /></a>
+            <a
+              href="#"
+              title="Pause all"
+              onClick={e => {
+                e.preventDefault();
+                selection.forEach(id => ws_send("PAUSE_TORRENT", { id }));
+              }}
+            ><FontAwesome name="pause" /></a>
+            <ButtonDropdown
+              isOpen={this.state.removeDropdown}
+              toggle={() => this.setState({ removeDropdown: !this.state.removeDropdown })}
+            >
+              <DropdownToggle color="danger" caret>
+                Remove all
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>Remove selected torrents</DropdownItem>
+                <DropdownItem>Remove selected torrents and delete files</DropdownItem>
+              </DropdownMenu>
+            </ButtonDropdown>
+          </div>
+        </h3>
       </div>
     );
   }
