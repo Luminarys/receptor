@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { formatBitrate } from '../bitrate';
 
+function throttle(v) {
+  return v === null ? "Unlimited" : formatBitrate(v);
+}
+
 function Server({ server }) {
   if (!server.id) {
     // TODO: websocket status?
@@ -20,9 +24,9 @@ function Server({ server }) {
         <dd>{formatBitrate(server.rate_down)}</dd>
         {/* TODO: Editable */}
         <dt>Throttle up</dt>
-        <dd>{formatBitrate(server.throttle_up)}</dd>
+        <dd>{throttle(server.throttle_up)}</dd>
         <dt>Throttle down</dt>
-        <dd>{formatBitrate(server.throttle_down)}</dd>
+        <dd>{throttle(server.throttle_down)}</dd>
       </dl>
     </div>
   );
