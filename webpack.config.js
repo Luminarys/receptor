@@ -1,7 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
 
-
 const defines = {
   "DEFAULT_WS_URI": process.env.WEBSOCKET_URI || "ws://localhost:8412/"
 };
