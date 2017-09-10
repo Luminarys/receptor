@@ -25,3 +25,15 @@ export function formatBitrate(bitrate) {
     return `${bitrate} b/s`;
   }
 }
+
+export function formatAmount(amount) {
+  if (amount > Rates["GiB/s"]) {
+    return `${(amount / Rates["GiB/s"]).toFixed(2)} GiB`;
+  } else if (amount > Rates["MiB/s"]) {
+    return `${(amount / Rates["MiB/s"]).toFixed(2)} MiB`;
+  } else if (amount > Rates["KiB/s"]) {
+    return `${(amount / Rates["KiB/s"]).toFixed(2)} KiB`;
+  } else {
+    return `${amount} bytes`;
+  }
+}

@@ -151,6 +151,7 @@ class Torrent extends Component {
                 <dd>{date(moment(torrent.created))}</dd>
               </dl>
               <TorrentOptions
+                id={torrent.id}
                 priority={torrent.priority}
                 priorityChanged={priority =>
                   dispatch(updateResource({ id: torrent.id, priority }))}

@@ -177,6 +177,7 @@ class AddTorrent extends Component {
       <Card>
         <CardBlock>
           <TorrentOptions
+            id="new-torrent"
             start={start}
             startChanged={start => this.setState({ start })}
             priority={priority}
