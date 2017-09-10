@@ -10,10 +10,10 @@ import {
   Collapse,
   Card,
   CardBlock,
-  Progress
 } from 'reactstrap';
 import moment from 'moment';
 import TorrentOptions from './torrent_options';
+import TorrentProgress from './torrent_progress';
 import ws_send from '../socket';
 import DateDisplay from './date';
 import selectTorrent, {
@@ -98,9 +98,7 @@ class Torrent extends Component {
             <FontAwesome name={torrent.status === "paused" ? "play" : "pause"} />
           </a>
           <div class="status">{status(torrent.status)}</div>
-          <Progress
-            value={torrent.progress * 100}
-          >{(torrent.progress * 100).toFixed(0)}%</Progress>
+          <TorrentProgress torrent={torrent} />
           <ButtonDropdown
             isOpen={this.state.removeDropdown}
             toggle={() => this.setState({ removeDropdown: !this.state.removeDropdown })}

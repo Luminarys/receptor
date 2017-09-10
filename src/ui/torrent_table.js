@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import selectTorrent, { UNION, SUBTRACT, EXCLUSIVE } from '../actions/selection';
 import { formatBitrate } from '../bitrate';
 import Ratio from './ratio';
+import TorrentProgress from './torrent_progress';
 
 class TorrentTable extends Component {
   render() {
@@ -28,20 +29,18 @@ class TorrentTable extends Component {
             <th>up</th>
             <th>down</th>
             <th>ratio</th>
+            <th>progress</th>
           </tr>
         </thead>
         <tbody>
           {Object.values(torrents).map(t =>
             <tr
               key={t.id}
-              className={`torrent progress-row ${
+              className={`torrent ${
                 t.status
               } ${
                 selection.indexOf(t.id) !== -1 ? "selected" : ""
               }`}
-              style={{
-                backgroundSize: `${t.progress * 100}% 3px`
-              }}
             >
               <td>
                 <input
@@ -64,6 +63,7 @@ class TorrentTable extends Component {
               <td>{formatBitrate(t.rate_up)}</td>
               <td>{formatBitrate(t.rate_down)}</td>
               <td><Ratio up={t.transferred_up} down={t.transferred_down} /></td>
+              <td><TorrentProgress torrent={t} /></td>
             </tr>
           )}
         </tbody>

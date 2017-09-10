@@ -7,13 +7,8 @@
 }
 
 .torrent {
-  &.paused {
-    color: $gray-dark;
-    background-color: $gray-lighter;
-  }
-
-  &.idle {
-    color: $gray-dark;
+  &.selected {
+    background-color: lighten($brand-primary, 45);
   }
 
   &.error {
@@ -24,29 +19,6 @@
       text-decoration: underline;
     }
   }
-
-  &.paused {
-    background-image: linear-gradient(to right, darken($gray-lighter, 20), darken($gray-lighter, 40));
-  }
-
-  &.pending, &.idle {
-    background-image: linear-gradient(to right, lighten($brand-info, 20), $brand-info);
-  }
-
-  &.seeding {
-    background-image: linear-gradient(to right, lighten($brand-primary, 20), $brand-primary);
-  }
-
-  &.leeching {
-    background-image: linear-gradient(to right, lighten($brand-success, 20), $brand-success);
-  }
-
-  &.selected {
-    background-color: lighten($brand-warning, 20);
-  }
-
-  background-repeat: no-repeat;
-  background-position: left bottom;
 }
 
 .connection-overlay {
@@ -164,7 +136,6 @@ fieldset .form-check-input:only-child {
   .progress {
     flex-grow: 1;
     height: 1rem;
-    border-radius: 0;
   }
 
   .btn-group {
@@ -213,6 +184,21 @@ fieldset .form-check-input:only-child {
 
     .dropdown-item {
       padding: 0 0.25rem;
+    }
+  }
+}
+
+.progress {
+  border-radius: 0;
+
+  .progress-bar {
+    &.bg-info, &.bg-success {
+      color: #222;
+    }
+
+    &.bg-default {
+      background: darken($gray-lighter, 10);
+      color: $black;
     }
   }
 }
