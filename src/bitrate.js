@@ -10,6 +10,10 @@ export function convertToBitrate(value, unit) {
   return value * Rates[unit];
 }
 
+export function convertFromBitrate(value, unit) {
+  return value / Rates[unit];
+}
+
 export function formatBitrate(bitrate) {
   if (bitrate > Rates["GiB/s"]) {
     return `${(bitrate / Rates["GiB/s"]).toFixed(2)} GiB/s`;

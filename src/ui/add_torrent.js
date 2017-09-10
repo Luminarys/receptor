@@ -16,128 +16,9 @@ import fetch from 'isomorphic-fetch';
 import bencode from 'bencode';
 import moment from 'moment';
 import ToggleContainer from './toggle_container';
+import TorrentOptions from './torrent_options';
 import ws_send from '../socket';
-import { convertToBitrate } from '../bitrate';
 import date from '../date';
-
-class Throttle extends Component {
-  constructor() {
-    super();
-    this.state = {
-      strategy: "global",
-      unit: "MiB/s",
-      limit: 1
-    };
-    this.setStrategy = this.setStrategy.bind(this);
-  }
-
-  invokeChange() {
-    const { onChange } = this.props;
-    if (!onChange) {
-      return;
-    }
-
-    const { strategy, limit, unit } = this.state;
-    switch (strategy) {
-      case "global":
-        onChange(null);
-        break;
-      case "unlimited":
-        onChange(-1);
-        break;
-      default:
-        onChange(convertToBitrate(limit, unit));
-        break;
-    }
-  }
-
-  setStrategy(strategy) {
-    this.setState({ strategy });
-    this.invokeChange();
-  }
-
-  setLimit(limit) {
-    if (limit <= 0) {
-      this.setState({ limit: this.state.limit });
-      return;
-    }
-    this.setState({ limit });
-    this.invokeChange();
-  }
-
-  setUnit(unit) {
-    this.setState({ unit });
-    this.invokeChange();
-  }
-
-  render() {
-    const { legend, prop } = this.props;
-    return (
-      <div>
-        <FormGroup tag="fieldset">
-          <legend>{legend}</legend>
-          <FormGroup check className="form-check-inline">
-            <Label for={`${prop}-global`} check>
-              <Input
-                type="radio"
-                name={prop}
-                id={`${prop}-global`}
-                onChange={e => this.setStrategy("global")}
-                checked={this.state.strategy === "global"}
-              /> Global
-            </Label>
-          </FormGroup>
-          <FormGroup check className="form-check-inline">
-            <Label for={`${prop}-unlimited`} check>
-              <Input
-                type="radio"
-                name={prop}
-                id={`${prop}-unlimited`}
-                onChange={e => this.setStrategy("unlimited")}
-                checked={this.state.strategy === "unlimited"}
-              /> Unlimited
-            </Label>
-          </FormGroup>
-          <FormGroup check className="form-check-inline">
-            <Label for={`${prop}-custom`} check>
-              <Input
-                type="radio"
-                name={prop}
-                id={`${prop}-custom`}
-                onChange={e => this.setStrategy("custom")}
-                checked={this.state.strategy === "custom"}
-              /> Custom
-            </Label>
-          </FormGroup>
-        </FormGroup>
-        {this.state.strategy === "custom" &&
-          <div className="row">
-            <FormGroup className="col-md-6">
-              <Input
-                type="number"
-                value={this.state.limit}
-                onChange={e => this.setLimit(parseFloat(e.target.value))}
-              />
-            </FormGroup>
-            <FormGroup className="col-md-6">
-              <Input
-                type="select"
-                id="unit"
-                value={this.state.unit}
-                onChange={e => this.setUnit(e.target.value)}
-              >
-                <option value="b/s">b/s</option>
-                <option value="KiB/s">KiB/s</option>
-                <option value="MiB/s">MiB/s</option>
-                <option value="GiB/s">GiB/s</option>
-              </Input>
-            </FormGroup>
-          </div>
-        }
-      </div>
-    );
-  }
-}
 
 class AddTorrent extends Component {
   constructor() {
@@ -150,9 +31,9 @@ class AddTorrent extends Component {
       useMagnet: false,
       torrent: null,
       files: [],
-      startImmediately: true,
-      uploadThrottle: -1,
-      downloadThrottle: -1,
+      start: true,
+      uploadThrottle: null,
+      downloadThrottle: null,
       priority: 3,
     };
   }
@@ -210,7 +91,7 @@ class AddTorrent extends Component {
         throttle_down: downloadThrottle
       }
     }, async done => {
-      if (this.state.startImmediately) {
+      if (this.state.start) {
         ws_send("RESUME_TORRENT", { id });
       }
       dispatch(push(`/torrents/${id}`));
@@ -219,7 +100,7 @@ class AddTorrent extends Component {
 
   uploadFile() {
     this.setState({ loading: true });
-    const { magnet, file, startImmediately } = this.state;
+    const { magnet, file, start } = this.state;
     const { dispatch } = this.props;
     const customize = // TODO: File options
       this.state.priority !== 3 ||
@@ -238,12 +119,12 @@ class AddTorrent extends Component {
     if (magnet) {
       ws_send("UPLOAD_MAGNET", {
         uri: magnet,
-        start: startImmediately && !customize
+        start: start && !customize
       }, handleOffer);
     } else {
       ws_send("UPLOAD_TORRENT", {
         size: file.size,
-        start: startImmediately && !customize
+        start: start && !customize
       }, handleOffer);
     }
   }
@@ -285,47 +166,27 @@ class AddTorrent extends Component {
   }
 
   renderOptions() {
+    const {
+      start,
+      priority,
+      downloadThrottle,
+      uploadThrottle
+    } = this.state;
+
     return (
       <Card>
         <CardBlock>
-          <FormGroup>
-            <Label for="start-immediately" check style={{paddingLeft: 0}}>
-              <input
-                type="checkbox"
-                checked={this.state.startImmediately}
-                onChange={e => this.setState({
-                  startImmediately: !this.state.startImmediately
-                })}
-                id="start-immediately"
-              /> Start immediately
-            </Label>
-          </FormGroup>
-          <FormGroup>
-            <Label for="priority">Priority</Label>
-            <Input
-              type="select"
-              id="priority"
-              value={this.state.priority}
-              onChange={e =>
-                this.setState({ priority: parseInt(e.target.value)})
-              }
-            >
-              <option value="1">Lowest</option>
-              <option value="2">Low</option>
-              <option value="3">Normal</option>
-              <option value="4">High</option>
-              <option value="5">Highest</option>
-            </Input>
-          </FormGroup>
-          <Throttle
-            prop="dl-throttle"
-            legend="Download throttle"
-            onChange={limit => this.setState({ downloadThrottle: limit })}
-          />
-          <Throttle
-            prop="ul-throttle"
-            legend="Upload throttle"
-            onChange={limit => this.setState({ uploadThrottle: limit })}
+          <TorrentOptions
+            start={start}
+            startChanged={start => this.setState({ start })}
+            priority={priority}
+            priorityChanged={priority => this.setState({ priority })}
+            downloadThrottle={downloadThrottle}
+            downloadThrottleChanged={downloadThrottle =>
+              this.setState({ downloadThrottle })}
+            uploadThrottle={uploadThrottle}
+            uploadThrottleChanged={uploadThrottle =>
+              { console.log(uploadThrottle); this.setState({ uploadThrottle }); }}
           />
         </CardBlock>
       </Card>
