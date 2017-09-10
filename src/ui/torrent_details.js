@@ -73,7 +73,7 @@ class Torrent extends Component {
   }
 
   render() {
-    const { dispatch, torrent, files } = this.props;
+    const { dispatch, torrent, files, trackers } = this.props;
     const status = s => s[0].toUpperCase() + s.slice(1);
 
     if (!torrent || !files) {
@@ -175,6 +175,35 @@ class Torrent extends Component {
             </CardBlock>
           </Card>
         </Collapse>
+        <Collapse isOpen={this.state.trackersShown}>
+          <Card style={{marginBottom: "1rem"}}>
+            <CardBlock>
+              {trackers.map(tracker =>
+                <div>
+                  <h5>{(() => {
+                      const a = document.createElement("a");
+                      a.href = tracker.url;
+                      return a.hostname;
+                    })()}
+                    {/* TODO: wire up this button: */}
+                    <button
+                      className="btn btn-sm btn-outline-primary pull-right"
+                    >Report</button>
+                  </h5>
+                  <dl>
+                    <dt>URL</dt>
+                    <dd>{tracker.url}</dd>
+                    <dt>Last report</dt>
+                    <dd>{date(moment(tracker.last_report))}</dd>
+                    {tracker.error && <dt>Error</dt>}
+                    {tracker.error &&
+                      <dd className="text-danger">{tracker.error}</dd>}
+                  </dl>
+                </div>
+              )}
+            </CardBlock>
+          </Card>
+        </Collapse>
       </div>
     );
   }
@@ -247,9 +276,22 @@ class TorrentDetails extends Component {
   }
 
   render() {
-    const { torrents, files, selection, dispatch } = this.props;
+    const {
+      torrents,
+      files,
+      trackers,
+      peers,
+      selection,
+      dispatch
+    } = this.props;
     const _files = Object.values(files).reduce((s, f) => ({
       ...s, [f.torrent_id]: [...(s[f.torrent_id] || []), f]
+    }), {});
+    const _trackers = Object.values(trackers).reduce((s, t) => ({
+      ...s, [t.torrent_id]: [...(s[t.torrent_id] || []), t]
+    }), {});
+    const _peers = Object.values(peers).reduce((s, p) => ({
+      ...s, [p.torrent_id]: [...(s[p.torrent_id] || []), p]
     }), {});
     return (
       <div>
@@ -258,6 +300,8 @@ class TorrentDetails extends Component {
           dispatch={dispatch}
           torrent={torrents[id]}
           files={_files[id] || []}
+          trackers={_trackers[id] || []}
+          peers={_peers[id] || []}
         />)}
         {selection.length > 3 ?
           <p class="text-center text-muted">
@@ -275,6 +319,8 @@ export default connect(state => ({
   router: state.router,
   torrents: state.torrents,
   files: state.files,
+  trackers: state.trackers,
+  peers: state.peers,
   selection: state.selection,
   server: state.server
 }))(TorrentDetails);
