@@ -18,7 +18,7 @@ import moment from 'moment';
 import ToggleContainer from './toggle_container';
 import TorrentOptions from './torrent_options';
 import ws_send from '../socket';
-import date from '../date';
+import DateDisplay from './date';
 
 class AddTorrent extends Component {
   constructor() {
@@ -199,7 +199,7 @@ class AddTorrent extends Component {
 
     const details = {
       "comment": d => d,
-      "creation date": d => date(moment(new Date(d * 1000))),
+      "creation date": d => <DateDisplay when={moment(new Date(d * 1000))} />,
       "created by": d => d
     };
 

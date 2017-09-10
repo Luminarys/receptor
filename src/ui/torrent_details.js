@@ -15,7 +15,7 @@ import {
 import moment from 'moment';
 import TorrentOptions from './torrent_options';
 import ws_send from '../socket';
-import date from '../date';
+import DateDisplay from './date';
 import selectTorrent, {
   EXCLUSIVE,
   UNION,
@@ -148,7 +148,7 @@ class Torrent extends Component {
                 <dt>Downloading to</dt>
                 <dd>{torrent.path}</dd>
                 <dt>Created</dt>
-                <dd>{date(moment(torrent.created))}</dd>
+                <dd><DateDisplay when={moment(torrent.created)} /></dd>
               </dl>
               <TorrentOptions
                 id={torrent.id}
@@ -195,7 +195,7 @@ class Torrent extends Component {
                     <dt>URL</dt>
                     <dd>{tracker.url}</dd>
                     <dt>Last report</dt>
-                    <dd>{date(moment(tracker.last_report))}</dd>
+                    <dd><DateDisplay when={moment(tracker.last_report)} /></dd>
                     {tracker.error && <dt>Error</dt>}
                     {tracker.error &&
                       <dd className="text-danger">{tracker.error}</dd>}
