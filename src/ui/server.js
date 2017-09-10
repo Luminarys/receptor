@@ -19,6 +19,7 @@ function Server({ server }) {
           className="btn btn-sm btn-outline-danger pull-right"
           onClick={() => {
             localStorage.removeItem("autoconnect");
+            localStorage.removeItem("password");
             ws_disconnect();
           }}
         >Disconnect</button>

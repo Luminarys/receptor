@@ -13,21 +13,31 @@ import {
 import { initialize } from '..';
 import { SOCKET_STATE } from '../actions/socket';
 
+const getURI = (uri, password) => `${uri}${password ?
+  `?password=${encodeURIComponent(password)}` : ''}`;
+
 class ConnectionOverlay extends Component {
   constructor() {
     super();
+    this.connect = this.connect.bind(this);
     const uri = localStorage.getItem("autoconnect");
-    this.state = { uri: uri || "ws://127.0.0.1:8412", autoconnect: !!uri };
+    const password = localStorage.getItem("password");
+    this.state = {
+      uri: uri || "ws://127.0.0.1:8412",
+      password: null,
+      autoconnect: !!uri
+    };
     if (uri) {
-      initialize(this.state.uri);
+      initialize(getURI(this.state.uri, this.state.password));
     }
   }
 
   connect() {
     if (this.state.autoconnect) {
       localStorage.setItem("autoconnect", this.state.uri);
+      localStorage.setItem("password", this.state.password);
     }
-    initialize(this.state.uri);
+    initialize(getURI(this.state.uri, this.state.password));
   }
 
   render() {
@@ -48,7 +58,7 @@ class ConnectionOverlay extends Component {
         </div>
       );
     }
-    const { uri, autoconnect } = this.state;
+    const { uri, password, autoconnect } = this.state;
     return (
       <div className="connection-overlay">
         <Card>
@@ -60,7 +70,18 @@ class ConnectionOverlay extends Component {
               <Input
                 id="socket-uri"
                 value={uri}
+                onKeyPress={e => e.keyCode === 13 && this.connect()}
                 onChange={e => this.setState({ uri: e.target.value })}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="socket-password">Server Password</Label>
+              <Input
+                id="socket-password"
+                value={password}
+                type="password"
+                onKeyPress={e => e.keyCode === 13 && this.connect()}
+                onChange={e => this.setState({ password: e.target.value })}
               />
             </FormGroup>
             <FormGroup>
@@ -76,7 +97,7 @@ class ConnectionOverlay extends Component {
             </FormGroup>
             <button
               className="btn btn-primary"
-              onClick={this.connect.bind(this)}
+              onClick={this.connect}
             >{socket.reason ? "Reconnect" : "Connect"}</button>
           </CardBlock>
         </Card>
