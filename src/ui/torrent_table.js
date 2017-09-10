@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import selectTorrent, { UNION, SUBTRACT, EXCLUSIVE } from '../actions/selection';
 import { formatBitrate } from '../bitrate';
+import Ratio from './ratio';
 
 class TorrentTable extends Component {
   render() {
@@ -62,7 +63,7 @@ class TorrentTable extends Component {
               </td>
               <td>{formatBitrate(t.rate_up)}</td>
               <td>{formatBitrate(t.rate_down)}</td>
-              <td>{(t.transferred_up / t.transferred_down).toFixed(2)}</td>
+              <td><Ratio up={t.transferred_up} down={t.transferred_down} /></td>
             </tr>
           )}
         </tbody>

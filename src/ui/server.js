@@ -1,29 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { formatBitrate, formatAmount } from '../bitrate';
+import { formatBitrate } from '../bitrate';
 import { ws_disconnect } from '../socket';
 import DateDisplay from './date';
+import Ratio from './ratio';
 import Throttle from './throttle';
 import { updateResource } from '../actions/resources';
-
-const ratio = (up, down) => {
-  const ratio = up / down;
-  if (isNaN(ratio)) {
-    return <dd>0</dd>;
-  }
-  return (
-    <dd>
-      {`${
-        ratio.toFixed(3)
-      } (${
-        formatAmount(up)
-      } up, ${
-        formatAmount(down)
-      } down)`}
-    </dd>
-  );
-};
 
 function Server({ server, dispatch }) {
   if (!server.id) {
@@ -78,9 +61,16 @@ function Server({ server, dispatch }) {
           />
         </dd>
         <dt>Lifetime ratio</dt>
-        {ratio(server.transferred_up, server.transferred_down)}
+        <dd>
+          <Ratio up={server.transferred_up} down={server.transferred_down} />
+        </dd>
         <dt>Session ratio</dt>
-        {ratio(server.ses_transferred_up, server.ses_transferred_down)}
+        <dd>
+          <Ratio
+            up={server.ses_transferred_up}
+            down={server.ses_transferred_down}
+          />
+        </dd>
       </dl>
     </div>
   );
