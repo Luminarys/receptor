@@ -112,7 +112,7 @@ export default class TorrentOptions extends Component {
     } = this.props;
     return (
       <div>
-        {typeof start !== undefined &&
+        {typeof start !== "undefined" &&
           <FormGroup>
             <Label for="start-immediately" check style={{paddingLeft: 0}}>
               <input

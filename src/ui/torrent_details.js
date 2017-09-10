@@ -12,13 +12,17 @@ import {
   CardBlock,
   Progress
 } from 'reactstrap';
+import moment from 'moment';
+import TorrentOptions from './torrent_options';
 import ws_send from '../socket';
+import date from '../date';
 import selectTorrent, {
   EXCLUSIVE,
   UNION,
   SUBTRACT,
   NONE
 } from '../actions/selection';
+import { updateResource } from '../actions/resources';
 
 function File({ file }) {
   // TODO: show progress bar
@@ -138,12 +142,27 @@ class Torrent extends Component {
           />
         </ButtonGroup>
         <Collapse isOpen={this.state.infoShown}>
-          <dl>
-            <dt>Downloading to</dt>
-            <dd>{torrent.path}</dd>
-            <dt>Created</dt>
-            <dd>{torrent.created}</dd>
-          </dl>
+          <Card>
+            <CardBlock>
+              <dl>
+                <dt>Downloading to</dt>
+                <dd>{torrent.path}</dd>
+                <dt>Created</dt>
+                <dd>{date(moment(torrent.created))}</dd>
+              </dl>
+              <TorrentOptions
+                priority={torrent.priority}
+                priorityChanged={priority =>
+                  dispatch(updateResource({ id: torrent.id, priority }))}
+                downloadThrottle={torrent.throttle_down}
+                downloadThrottleChanged={throttle_down =>
+                  dispatch(updateResource({ id: torrent.id, throttle_down }))}
+                uploadThrottle={torrent.throttle_up}
+                uploadThrottleChanged={throttle_up =>
+                  dispatch(updateResource({ id: torrent.id, throttle_up }))}
+              />
+            </CardBlock>
+          </Card>
         </Collapse>
         <Collapse isOpen={this.state.filesShown}>
           <Card style={{marginBottom: "1rem"}}>
