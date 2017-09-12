@@ -34,7 +34,7 @@ ReactDOM.render(
     <ConnectedRouter history={history}>
       <div>
         <Nav />
-        <div className="container">
+        <div className="container-fluid">
           <Main />
         </div>
       </div>
