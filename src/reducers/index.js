@@ -9,7 +9,6 @@ import torrents from './torrents';
 import files from './files';
 import peers from './peers';
 import trackers from './trackers';
-import pieces from './pieces';
 
 const root = combineReducers({
   socket,
@@ -21,7 +20,6 @@ const root = combineReducers({
   files,
   peers,
   trackers,
-  pieces,
   router: routerReducer
 });
 

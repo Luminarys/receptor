@@ -15,7 +15,7 @@ export default function selectTorrent(ids, action, navigate=true) {
     const next = new Set(state.selection);
     const filter_subscriptions = state.filter_subscribe;
     const subscriptions = state.subscribe;
-    const { peers, files, pieces, trackers } = state;
+    const { peers, files, trackers } = state;
 
     const added = next.difference(previous);
     const removed = previous.difference(next);
@@ -26,7 +26,6 @@ export default function selectTorrent(ids, action, navigate=true) {
       ];
       dispatch(filter_subscribe("peer", criteria));
       dispatch(filter_subscribe("file", criteria));
-      dispatch(filter_subscribe("piece", criteria));
       dispatch(filter_subscribe("tracker", criteria));
     });
 
@@ -47,9 +46,6 @@ export default function selectTorrent(ids, action, navigate=true) {
         //...Object.values(trackers)
         //  .filter(tracker => tracker.torrent_id === t)
         //  .map(tracker => tracker.id),
-        //...Object.values(pieces)
-        //  .filter(piece => piece.torrent_id === t)
-        //  .map(piece => piece.id),
       ];
       if (_ids.length > 0) {
         dispatch(unsubscribe(..._ids));
