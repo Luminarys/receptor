@@ -7,48 +7,9 @@ sources:
   - https://git.sr.ht/~sircmpwn/receptor
 environment:
   deploy: synapse@synapse-bt.org
+secrets:
+  - 7ebab768-e5e4-4c9d-ba57-ec41a72c5665
 tasks:
-  - keys: |
-      -----BEGIN PGP MESSAGE-----
-
-      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
-      cPsPt8/IT8LF5joKW3Q=
-      =iFUO
-      -----END PGP MESSAGE-----
   - setup: |
       cd receptor
       npm install
