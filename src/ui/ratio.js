@@ -6,6 +6,9 @@ export default function Ratio({ up, down }) {
   if (isNaN(ratio)) {
     return <span>0</span>;
   }
+  if (!isFinite(ratio)) {
+    return <span>∞</span>;
+  }
   return (
     <span>
       {`${
