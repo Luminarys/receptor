@@ -1,5 +1,5 @@
 export const Rates = {
-  "b/s": Math.pow(1024, 0),
+  "B/s": Math.pow(1024, 0),
   "KiB/s": Math.pow(1024, 1),
   "MiB/s": Math.pow(1024, 2),
   "GiB/s": Math.pow(1024, 3),
@@ -22,7 +22,7 @@ export function formatBitrate(bitrate) {
   } else if (bitrate > Rates["KiB/s"]) {
     return `${(bitrate / Rates["KiB/s"]).toFixed(2)} KiB/s`;
   } else {
-    return `${bitrate} b/s`;
+    return `${bitrate} B/s`;
   }
 }
 
