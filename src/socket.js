@@ -7,6 +7,9 @@ let transactions = {};
 let connected = false;
 let queue = [];
 
+const getURI = ({ uri, password }) => `${uri}${password ?
+  `?password=${encodeURIComponent(password)}` : ''}`;
+
 export default function ws_send(type, body, callback = null) {
   const _serial = serial++;
   if (callback) {
@@ -43,7 +46,7 @@ function ws_recv(e) {
 }
 
 export function ws_init(uri, open, close) {
-  ws = new WebSocket(uri);
+  ws = new WebSocket(getURI(uri));
   ws.addEventListener("open", () => {
     connected = true;
     open.apply(this, arguments);
