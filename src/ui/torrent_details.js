@@ -15,6 +15,7 @@ import moment from 'moment';
 import TorrentOptions from './torrent_options';
 import TorrentProgress from './torrent_progress';
 import ws_send from '../socket';
+import store from '../store';
 import DateDisplay from './date';
 import selectTorrent, {
   EXCLUSIVE,
@@ -24,12 +25,19 @@ import selectTorrent, {
 } from '../actions/selection';
 import { updateResource } from '../actions/resources';
 
+const dlURI = (uri, password, id) => `${uri.replace('ws', 'http')}/dl/${id}?password=${encodeURIComponent(password)}`;
+
 function File({ file }) {
   // TODO: show progress bar
   // TODO: edit priority
+  const { uri, password } = store.getState().socket;
   return (
     <tr>
-      <td>{file.path}</td>
+      <td>
+        <a href={dlURI(uri, password, file.id)} target="_new">
+          {file.path}
+        </a>
+      </td>
       <td>{file.priority}</td>
       <td>{file.availability}</td>
     </tr>

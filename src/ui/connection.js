@@ -13,8 +13,7 @@ import {
 import { initialize } from '..';
 import { SOCKET_STATE } from '../actions/socket';
 
-const getURI = (uri, password) => `${uri}${password ?
-  `?password=${encodeURIComponent(password)}` : ''}`;
+const getURI = (uri, password) => ({ uri, password });
 
 class ConnectionOverlay extends Component {
   constructor() {
