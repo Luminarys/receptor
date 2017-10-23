@@ -53,7 +53,7 @@ class AddTorrent extends Component {
     console.log(socket);
     const a = document.createElement('a');
     a.href = socket.uri;
-    const url = (a.protocol === "ws:" ? "http://" : "https://") + a.host;
+    const url = (a.protocol === "ws:" ? "http://" : "https://") + a.host + a.pathname;
     try {
       const resp = await fetch(url,
         {
