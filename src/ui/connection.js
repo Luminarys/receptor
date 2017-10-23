@@ -23,7 +23,7 @@ class ConnectionOverlay extends Component {
     const password = localStorage.getItem("password");
     this.state = {
       uri: uri || "ws://127.0.0.1:8412",
-      password: null,
+      password,
       autoconnect: !!uri
     };
     if (uri) {
