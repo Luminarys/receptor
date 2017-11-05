@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import FontAwesome from 'react-fontawesome';
 import { formatAmount } from '../bitrate';
 
 export default function Ratio({ up, down }) {
@@ -11,13 +12,11 @@ export default function Ratio({ up, down }) {
   }
   return (
     <span>
-      {`${
-        ratio.toFixed(3)
-      } (${
-        formatAmount(up)
-      } up, ${
-        formatAmount(down)
-      } down)`}
+      <span>
+        {ratio.toFixed(3)}
+      </span>
+      <span>(${formatAmount(up)} <FontAwesome name="arrow-circle-o-up" /></span>
+      <span>${formatAmount(up)} <FontAwesome name="arrow-circle-o-down" />)</span>
     </span>
   );
 }
