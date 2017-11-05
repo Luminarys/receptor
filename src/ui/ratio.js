@@ -16,7 +16,7 @@ export default function Ratio({ up, down }) {
         {`${ratio.toFixed(3)} `}
       </span>
       <span>({formatAmount(up)} <FontAwesome name="arrow-up" /></span>
-      <span>{` ${formatAmount(up)}`} <FontAwesome name="arrow-down" />)</span>
+      <span>{` ${formatAmount(down)}`} <FontAwesome name="arrow-down" />)</span>
     </span>
   );
 }
