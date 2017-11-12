@@ -33,7 +33,7 @@ class TorrentTable extends Component {
           </tr>
         </thead>
         <tbody>
-          {Object.values(torrents).map(t =>
+          {Object.values(torrents).slice().sort((a, b) => a.name.localeCompare(b.name)).map(t =>
             <tr
               key={t.id}
               className={`torrent ${

@@ -180,7 +180,7 @@ class Torrent extends Component {
             <CardBlock>
               <table className="table table-striped" style={{marginBottom: "0"}}>
                 <tbody>
-                  {files.map(file => <File file={file} />)}
+                  {files.slice().sort((a, b) => a.path.localeCompare(b.path)).map(file => <File file={file} />)}
                 </tbody>
               </table>
             </CardBlock>
