@@ -34,9 +34,13 @@ function File({ file }) {
   return (
     <tr>
       <td>
-        <a href={dlURI(uri, password, file.id)} target="_new">
-          {file.path}
-        </a>
+        {
+          file.progress == 1.0
+            ? <a href={dlURI(uri, password, file.id)} target="_new">
+                {file.path}
+              </a>
+            : file.path
+        }
       </td>
       <td>{file.priority}</td>
       <td>{file.availability}</td>
@@ -176,7 +180,7 @@ class Torrent extends Component {
             <CardBlock>
               <table className="table table-striped" style={{marginBottom: "0"}}>
                 <tbody>
-                  {files.map(file => <File file={file} />)}
+                  {files.slice().sort((a, b) => a.path.localeCompare(b.path)).map(file => <File file={file} />)}
                 </tbody>
               </table>
             </CardBlock>
