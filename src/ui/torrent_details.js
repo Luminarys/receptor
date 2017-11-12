@@ -34,9 +34,13 @@ function File({ file }) {
   return (
     <tr>
       <td>
-        <a href={dlURI(uri, password, file.id)} target="_new">
-          {file.path}
-        </a>
+        {
+          file.progress == 1.0
+            ? <a href={dlURI(uri, password, file.id)} target="_new">
+                {file.path}
+              </a>
+            : file.path
+        }
       </td>
       <td>{file.priority}</td>
       <td>{file.availability}</td>
