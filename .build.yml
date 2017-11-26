@@ -19,5 +19,5 @@ tasks:
   - deploy: |
       cd receptor
       sshopts="-o StrictHostKeyChecking=no"
-      rsync --rsh="ssh $sshopts" -rP index.html ${deploy}:/var/html/web.synapse-bt.org/
-      rsync --rsh="ssh $sshopts" -rP dist ${deploy}:/var/html/web.synapse-bt.org/
+      rsync --rsh="ssh $sshopts" -rP index.html ${deploy}:/var/www/web.synapse-bt.org/
+      rsync --rsh="ssh $sshopts" -rP dist ${deploy}:/var/www/web.synapse-bt.org/
