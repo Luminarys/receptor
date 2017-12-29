@@ -75,10 +75,10 @@ class AddTorrent extends Component {
       downloadThrottle
     } = this.state;
     const { dispatch } = this.props;
-    const customize = // TODO: File options
+    const customize =
       priority !== 3 ||
-      uploadThrottle !== -1 ||
-      downloadThrottle !== -1;
+      uploadThrottle !== null ||
+      downloadThrottle !== null;
     if (!customize) {
       dispatch(push(`/torrents/${id}`));
       return;
@@ -102,10 +102,10 @@ class AddTorrent extends Component {
     this.setState({ loading: true });
     const { magnet, file, start } = this.state;
     const { dispatch } = this.props;
-    const customize = // TODO: File options
+    const customize =
       this.state.priority !== 3 ||
-      this.state.uploadThrottle !== -1 ||
-      this.state.downloadThrottle !== -1;
+      this.state.uploadThrottle !== null ||
+      this.state.downloadThrottle !== null;
     const handleOffer = async offer => {
       switch (offer.type) {
         case "TRANSFER_OFFER":
@@ -232,15 +232,6 @@ class AddTorrent extends Component {
         <ToggleContainer className="form-group" title="Options">
           {this.renderOptions.bind(this)()}
         </ToggleContainer>
-        {torrent &&
-          <ToggleContainer className="form-group" title="Files">
-            <Card>
-              <CardBlock>
-                TODO
-              </CardBlock>
-            </Card>
-          </ToggleContainer>
-        }
         <button
           type="button"
           className="btn btn-primary btn-block"

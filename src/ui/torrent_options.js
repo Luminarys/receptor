@@ -52,12 +52,14 @@ export default class TorrentOptions extends Component {
           prop={`dl-throttle-${id}`}
           legend="Download throttle"
           limit={downloadThrottle}
+          global={true}
           onChange={limit => downloadThrottleChanged(limit)}
         />
         <Throttle
           prop={`ul-throttle-${id}`}
           legend="Upload throttle"
           limit={uploadThrottle}
+          global={true}
           onChange={limit => uploadThrottleChanged(limit)}
         />
       </div>
