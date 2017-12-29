@@ -260,7 +260,7 @@ class Torrent extends Component {
               </div>
               {peers.length === 0 &&
                 <div style={{padding: "0.5rem 0 0 0.5rem"}}>
-                  <p>No connected peers.</p>}
+                  <p>No connected peers.</p>
                 </div>}
             </CardBlock>
           </Card>
