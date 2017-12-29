@@ -14,26 +14,42 @@ export function convertFromBitrate(value, unit) {
   return value / Rates[unit];
 }
 
-export function formatBitrate(bitrate) {
+export function convertedRate(bitrate) {
   if (bitrate > Rates["GiB/s"]) {
-    return `${(bitrate / Rates["GiB/s"]).toFixed(2)} GiB/s`;
+    return [bitrate / Rates["GiB/s"], "GiB/s"];
   } else if (bitrate > Rates["MiB/s"]) {
-    return `${(bitrate / Rates["MiB/s"]).toFixed(2)} MiB/s`;
+    return [bitrate / Rates["MiB/s"], "MiB/s"];
   } else if (bitrate > Rates["KiB/s"]) {
-    return `${(bitrate / Rates["KiB/s"]).toFixed(2)} KiB/s`;
+    return [bitrate / Rates["KiB/s"], "KiB/s"];
   } else {
-    return `${bitrate} B/s`;
+    return [bitrate, "B/s"];
   }
 }
 
-export function formatAmount(amount) {
-  if (amount > Rates["GiB/s"]) {
-    return `${(amount / Rates["GiB/s"]).toFixed(2)} GiB`;
-  } else if (amount > Rates["MiB/s"]) {
-    return `${(amount / Rates["MiB/s"]).toFixed(2)} MiB`;
-  } else if (amount > Rates["KiB/s"]) {
-    return `${(amount / Rates["KiB/s"]).toFixed(2)} KiB`;
-  } else {
-    return `${amount} bytes`;
+export function formatBitrate(bitrate) {
+  const [rate, unit] = convertedRate(bitrate);
+  let places = 2;
+  if (rate >= 100) {
+    places = 0;
+  } else if (rate >= 10) {
+    places = 1;
   }
+  return `${rate.toFixed(places)} ${unit}`;
+}
+
+export function formatAmount(amount) {
+  const units = {
+    "GiB/s": "GiB",
+    "MiB/s": "MiB",
+    "KiB/s": "KiB",
+    "B/s": "bytes"
+  };
+  const [rate, unit] = convertedRate(amount);
+  let places = 2;
+  if (rate >= 100) {
+    places = 0;
+  } else if (rate >= 10) {
+    places = 1;
+  }
+  return `${rate.toFixed(places)} ${units[unit]}`;
 }

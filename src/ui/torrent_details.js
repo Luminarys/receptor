@@ -77,10 +77,10 @@ function File({ dispatch, file }) {
 function Peer({ peer }) {
   return (
     <div className="peer">
-      <div style={{flexGrow: 1}}>{peer.ip}</div>
-      <div>{formatBitrate(peer.rate_up)} up</div>
-      <div>{formatBitrate(peer.rate_down)} down</div>
-      <div>has {`${(peer.availability * 100).toFixed(0)}%`}</div>
+      <div style={{flexGrow: 5}}>{peer.ip}</div>
+      <div style={{flexBasis: "18%"}}>{formatBitrate(peer.rate_up)} up</div>
+      <div style={{flexBasis: "18%"}}>{formatBitrate(peer.rate_down)} down</div>
+      <div style={{flexBasis: "18%"}}>has {`${(peer.availability * 100).toFixed(0)}%`}</div>
     </div>
   );
 }
