@@ -87,7 +87,6 @@ export default class Throttle extends Component {
                 value={unit}
                 onChange={e => this.setUnit(e.target.value)}
               >
-                <option value="b/s">b/s</option>
                 <option value="KiB/s">KiB/s</option>
                 <option value="MiB/s">MiB/s</option>
                 <option value="GiB/s">GiB/s</option>
