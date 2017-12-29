@@ -2,7 +2,7 @@
 
 WIP web frontend for [synapse](https://github.com/Luminarys/synapse).
 
-[![](https://sr.ht/TkmY.png)](https://sr.ht/TkmY.png)
+[![](https://sr.ht/PQfE.png)](https://sr.ht/PQfE.png)
 
 I really mean it when I say "WIP" here. There's only a few people that I want
 bug reports from right now and they know who they are.
