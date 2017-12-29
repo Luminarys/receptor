@@ -188,6 +188,22 @@ fieldset .form-check-input:only-child {
   }
 }
 
+.ratio {
+  & > * {
+    padding: 0 0.5rem;
+  }
+}
+
+.torrents .ratio {
+  display: flex;
+
+  & > * {
+    padding: 0;
+    flex: 1 1 0;
+    text-align: right;
+  }
+}
+
 .progress {
   border-radius: 0;
 

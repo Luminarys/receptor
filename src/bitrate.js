@@ -33,6 +33,8 @@ export function formatBitrate(bitrate) {
     places = 0;
   } else if (rate >= 10) {
     places = 1;
+  } else if (rate == 0) {
+    places = 0;
   }
   return `${rate.toFixed(places)} ${unit}`;
 }
@@ -50,6 +52,8 @@ export function formatAmount(amount) {
     places = 0;
   } else if (rate >= 10) {
     places = 1;
+  } else if (rate == 0) {
+    places = 0;
   }
   return `${rate.toFixed(places)} ${units[unit]}`;
 }

@@ -9,7 +9,7 @@ class TorrentTable extends Component {
   render() {
     const { selection, torrents, dispatch } = this.props;
     return (
-      <table className="table">
+      <table className="table torrents">
         <thead>
           <tr>
             <th style={{width: "1px"}}>
@@ -28,7 +28,13 @@ class TorrentTable extends Component {
             <th>name</th>
             <th>up</th>
             <th>down</th>
-            <th>ratio</th>
+            <th style={{width: "18rem"}}>
+              <span class="ratio">
+                <span>ratio</span>
+                <span></span>
+                <span></span>
+              </span>
+            </th>
             <th>progress</th>
           </tr>
         </thead>
