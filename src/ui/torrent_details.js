@@ -238,9 +238,11 @@ class Torrent extends Component {
                       a.href = tracker.url;
                       return a.hostname;
                     })()}
-                    {/* TODO: wire up this button: */}
                     <button
                       className="btn btn-sm btn-outline-primary pull-right"
+                      onClick={() => {
+                        ws_send("UPDATE_TRACKER", { id: tracker.id })
+                      }}
                     >Report</button>
                   </h5>
                   <dl>
