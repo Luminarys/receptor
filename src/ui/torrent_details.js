@@ -162,7 +162,12 @@ class Torrent extends Component {
                   ws_send("REMOVE_RESOURCE", { id: torrent.id });
                 }}
               >Remove</DropdownItem>
-              <DropdownItem>Remove and delete files</DropdownItem>
+              <DropdownItem
+                onClick={() => {
+                  dispatch(selectTorrent([torrent.id], SUBTRACT));
+                  ws_send("REMOVE_RESOURCE", { id: torrent.id, artifacts: true });
+                }}
+              >Remove and delete files</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
         </div>
