@@ -376,6 +376,7 @@ class TorrentDetails extends Component {
           files={_files[id] || []}
           trackers={_trackers[id] || []}
           peers={_peers[id] || []}
+          key={id}
         />)}
         {selection.length > 3 ?
           <p class="text-center text-muted">
