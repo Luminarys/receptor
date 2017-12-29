@@ -10,6 +10,8 @@ import {
   Collapse,
   Card,
   CardBlock,
+  Progress,
+  Input,
 } from 'reactstrap';
 import moment from 'moment';
 import TorrentOptions from './torrent_options';
@@ -27,24 +29,47 @@ import { updateResource } from '../actions/resources';
 
 const dlURI = (uri, password, id) => `${uri.replace('ws', 'http')}/dl/${id}?password=${encodeURIComponent(password)}`;
 
-function File({ file }) {
-  // TODO: show progress bar
+function basename(path) {
+  const parts = path.split("/");
+  return parts[parts.length - 1];
+}
+
+function File({ dispatch, file }) {
   // TODO: edit priority
   const { uri, password } = store.getState().socket;
   return (
-    <tr>
-      <td>
-        {
-          file.progress == 1.0
-            ? <a href={dlURI(uri, password, file.id)} target="_new">
-                {file.path}
-              </a>
-            : file.path
-        }
-      </td>
-      <td>{file.priority}</td>
-      <td>{file.availability}</td>
-    </tr>
+    <div className="file">
+      <Progress
+        value={file.progress * 100}
+        color={file.progress != 1.0 ? "success" : "primary"}
+      >
+        {file.progress == 1.0 ?
+          "done" : `${(file.progress * 100).toFixed(0)}%`}
+      </Progress>
+      <div className="path" title={file.path}>
+        {file.progress == 1.0 ?
+          <a href={dlURI(uri, password, file.id)} target="_new">
+            {basename(file.path)}
+          </a> : basename(file.path)}
+      </div>
+      <div>
+        <Input
+          type="select"
+          id="priority"
+          value={file.priority}
+          onChange={e => dispatch(updateResource({
+            id: file.id,
+            priority: parseInt(e.target.value)
+          }))}
+        >
+          <option value="1">Lowest</option>
+          <option value="2">Low</option>
+          <option value="3">Normal</option>
+          <option value="4">High</option>
+          <option value="5">Highest</option>
+        </Input>
+      </div>
+    </div>
   );
 }
 
@@ -129,7 +154,7 @@ class Torrent extends Component {
             </DropdownMenu>
           </ButtonDropdown>
         </div>
-        <ButtonGroup>
+        <ButtonGroup className="toggles">
           <CollapseToggle
             text="Info"
             onToggle={() => this.setState({ infoShown: !this.state.infoShown })}
@@ -152,7 +177,7 @@ class Torrent extends Component {
           />
         </ButtonGroup>
         <Collapse isOpen={this.state.infoShown}>
-          <Card>
+          <Card style={{marginBottom: "1rem"}}>
             <CardBlock>
               <dl>
                 <dt>Downloading to</dt>
@@ -177,12 +202,12 @@ class Torrent extends Component {
         </Collapse>
         <Collapse isOpen={this.state.filesShown}>
           <Card style={{marginBottom: "1rem"}}>
-            <CardBlock>
-              <table className="table table-striped" style={{marginBottom: "0"}}>
-                <tbody>
-                  {files.slice().sort((a, b) => a.path.localeCompare(b.path)).map(file => <File file={file} />)}
-                </tbody>
-              </table>
+            <CardBlock style={{padding: "0"}}>
+              <div className="files" style={{marginBottom: "0"}}>
+                {files.slice().sort((a, b) =>
+                  a.path.localeCompare(b.path)).map(file =>
+                    <File dispatch={dispatch} file={file} />)}
+              </div>
             </CardBlock>
           </Card>
         </Collapse>
