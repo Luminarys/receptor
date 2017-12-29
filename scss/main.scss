@@ -203,8 +203,8 @@ fieldset .form-check-input:only-child {
   }
 }
 
-.files {
-  .file {
+.flex-table {
+  & > div {
     display: flex;
     padding: 0.1rem 0.25rem;
 
@@ -212,7 +212,7 @@ fieldset .form-check-input:only-child {
       background: #dfdfdf;
     }
 
-    div {
+    & > div {
       margin: 0 0.5rem;
 
       &:first-child {
@@ -223,27 +223,29 @@ fieldset .form-check-input:only-child {
         margin-right: 0;
       }
     }
+  }
+}
 
-    .progress {
-      min-width: 3rem;
-      align-self: center;
+.files .file {
+  .progress {
+    min-width: 3rem;
+    align-self: center;
 
-      .progress-bar {
-        height: 100%;
-      }
+    .progress-bar {
+      height: 100%;
     }
+  }
 
-    .path {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      flex-grow: 1;
-      line-height: 1.7;
-    }
+  .path {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-grow: 1;
+    line-height: 1.7;
+  }
 
-    select {
-      min-width: 5rem;
-    }
+  select {
+    min-width: 5rem;
   }
 }
 

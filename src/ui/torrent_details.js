@@ -26,6 +26,7 @@ import selectTorrent, {
   NONE
 } from '../actions/selection';
 import { updateResource } from '../actions/resources';
+import { formatBitrate } from '../bitrate';
 
 const dlURI = (uri, password, id) => `${uri.replace('ws', 'http')}/dl/${id}?password=${encodeURIComponent(password)}`;
 
@@ -35,7 +36,6 @@ function basename(path) {
 }
 
 function File({ dispatch, file }) {
-  // TODO: edit priority
   const { uri, password } = store.getState().socket;
   return (
     <div className="file">
@@ -43,11 +43,11 @@ function File({ dispatch, file }) {
         value={file.progress * 100}
         color={file.progress != 1.0 ? "success" : "primary"}
       >
-        {file.progress == 1.0 ?
+        {file.progress === 1.0 ?
           "done" : `${(file.progress * 100).toFixed(0)}%`}
       </Progress>
       <div className="path" title={file.path}>
-        {file.progress == 1.0 ?
+        {file.progress === 1.0 ?
           <a href={dlURI(uri, password, file.id)} target="_new">
             {basename(file.path)}
           </a> : basename(file.path)}
@@ -62,6 +62,7 @@ function File({ dispatch, file }) {
             priority: parseInt(e.target.value)
           }))}
         >
+          <option value="0">Skip</option>
           <option value="1">Lowest</option>
           <option value="2">Low</option>
           <option value="3">Normal</option>
@@ -69,6 +70,17 @@ function File({ dispatch, file }) {
           <option value="5">Highest</option>
         </Input>
       </div>
+    </div>
+  );
+}
+
+function Peer({ peer }) {
+  return (
+    <div className="peer">
+      <div style={{flexGrow: 1}}>{peer.ip}</div>
+      <div>{formatBitrate(peer.rate_up)} up</div>
+      <div>{formatBitrate(peer.rate_down)} down</div>
+      <div>has {`${(peer.availability * 100).toFixed(0)}%`}</div>
     </div>
   );
 }
@@ -110,7 +122,7 @@ class Torrent extends Component {
   }
 
   render() {
-    const { dispatch, torrent, files, trackers } = this.props;
+    const { dispatch, torrent, files, trackers, peers } = this.props;
     const status = s => s[0].toUpperCase() + s.slice(1);
 
     if (!torrent || !files) {
@@ -203,7 +215,7 @@ class Torrent extends Component {
         <Collapse isOpen={this.state.filesShown}>
           <Card style={{marginBottom: "1rem"}}>
             <CardBlock style={{padding: "0"}}>
-              <div className="files" style={{marginBottom: "0"}}>
+              <div className="files flex-table" style={{marginBottom: "0"}}>
                 {files.slice().sort((a, b) =>
                   a.path.localeCompare(b.path)).map(file =>
                     <File dispatch={dispatch} file={file} />)}
@@ -237,6 +249,19 @@ class Torrent extends Component {
                   </dl>
                 </div>
               )}
+            </CardBlock>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={this.state.peersShown}>
+          <Card style={{marginBottom: "1rem"}}>
+            <CardBlock style={{padding: "0"}}>
+              <div className="peers flex-table" style={{marginBottom: "0"}}>
+                {peers.map(peer => <Peer peer={peer} />)}
+              </div>
+              {peers.length === 0 &&
+                <div style={{padding: "0.5rem 0 0 0.5rem"}}>
+                  <p>No connected peers.</p>}
+                </div>}
             </CardBlock>
           </Card>
         </Collapse>

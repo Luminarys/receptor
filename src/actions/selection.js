@@ -39,13 +39,13 @@ export default function selectTorrent(ids, action, navigate=true) {
       const _ids = [
         ...Object.values(files)
           .filter(file => file.torrent_id === t)
-          .map(file => file.id)
-        //...Object.values(peers)
-        //  .filter(peer => peer.torrent_id === t)
-        //  .map(peer => peer.id),
-        //...Object.values(trackers)
-        //  .filter(tracker => tracker.torrent_id === t)
-        //  .map(tracker => tracker.id),
+          .map(file => file.id),
+        ...Object.values(peers)
+          .filter(peer => peer.torrent_id === t)
+          .map(peer => peer.id),
+        ...Object.values(trackers)
+          .filter(tracker => tracker.torrent_id === t)
+          .map(tracker => tracker.id)
       ];
       if (_ids.length > 0) {
         dispatch(unsubscribe(..._ids));
