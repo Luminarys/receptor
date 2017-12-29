@@ -332,7 +332,15 @@ class TorrentDetails extends Component {
                     selection.forEach(id => ws_send("REMOVE_RESOURCE", { id }));
                   }}
                 >Remove selected torrents</DropdownItem>
-                <DropdownItem>Remove selected torrents and delete files</DropdownItem>
+                <DropdownItem
+                  onClick={() => {
+                    dispatch(selectTorrent(selection, SUBTRACT));
+                    selection.forEach(id => ws_send("REMOVE_RESOURCE", {
+                      id,
+                      artifacts: true
+                    }));
+                  }}
+                >Remove selected torrents and delete files</DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>
           </div>

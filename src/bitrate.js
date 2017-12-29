@@ -26,17 +26,22 @@ export function convertedRate(bitrate) {
   }
 }
 
-export function formatBitrate(bitrate) {
-  const [rate, unit] = convertedRate(bitrate);
+function places(n) {
   let places = 2;
-  if (rate >= 100) {
+  if (n >= 100) {
     places = 0;
-  } else if (rate >= 10) {
+  } else if (n >= 10) {
     places = 1;
-  } else if (rate == 0) {
+  }
+  if (n.toFixed(places) === (0).toFixed(places)) {
     places = 0;
   }
-  return `${rate.toFixed(places)} ${unit}`;
+  return places;
+}
+
+export function formatBitrate(bitrate) {
+  const [rate, unit] = convertedRate(bitrate);
+  return `${rate.toFixed(places(rate))} ${unit}`;
 }
 
 export function formatAmount(amount) {
@@ -47,13 +52,5 @@ export function formatAmount(amount) {
     "B/s": "bytes"
   };
   const [rate, unit] = convertedRate(amount);
-  let places = 2;
-  if (rate >= 100) {
-    places = 0;
-  } else if (rate >= 10) {
-    places = 1;
-  } else if (rate == 0) {
-    places = 0;
-  }
-  return `${rate.toFixed(places)} ${units[unit]}`;
+  return `${rate.toFixed(places(rate))} ${units[unit]}`;
 }
