@@ -44,3 +44,5 @@ ReactDOM.render(
 navigator.registerProtocolHandler("magnet",
   window.location.origin + "/add-torrent/%s",
   "Open magnet link with receptor");
+
+Notification && Notification.requestPermission();

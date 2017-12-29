@@ -1,6 +1,15 @@
 import { UPDATE_RESOURCES, RESOURCES_REMOVED } from '../actions/resources';
 import { SOCKET_STATE, SOCKET_UPDATE } from '../actions/socket';
 
+function hack(old, _new) {
+  if (old && old.type == "torrent") {
+    if (old.progress != 1 && _new.progress == 1) {
+      Notification && new Notification("Download complete: " + _new.name);
+    }
+  }
+  return _new;
+}
+
 export default function resourceReducer(type) {
   return (state = {}, action) => {
     switch (action.type) {
@@ -11,7 +20,7 @@ export default function resourceReducer(type) {
             .filter(r => r.type === type)
             .reduce((s, r) => ({
               ...s,
-              [r.id]: { ...state[r.id], ...r }
+              [r.id]: hack(state[r.id], { ...state[r.id], ...r })
             }), {})
         };
       case RESOURCES_REMOVED:
