@@ -8,6 +8,7 @@ function color(torrent) {
     case "seeding":
       return "primary";
     case "hashing":
+    case "magnet":
       return "info";
     case "idle":
     case "pending":

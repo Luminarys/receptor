@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { filter_subscribe } from '../actions/filter_subscribe';
 import { push } from 'react-router-redux';
 import query from 'query-string';
+import search_criteria from '../search';
 
 function search_qs(text) {
   const qs = query.stringify({
@@ -13,37 +14,6 @@ function search_qs(text) {
   return `${
     location.pathname === "/" ? location.pathname : ""
   }${qs && "?" + qs}`;
-}
-
-// via https://stackoverflow.com/a/46946490
-const ssplit = str => str.match(/\\?.|^$/g).reduce((p, c) => {
-    if (c === '"') {
-        p.quote ^= 1;
-    } else if (!p.quote && c === ' ') {
-        p.a.push('');
-    } else {
-        p.a[p.a.length-1] += c.replace(/\\(.)/,"$1");
-    }
-    return p;
-}, {a: ['']}).a;
-
-function search_criteria(text) {
-  const terms = ssplit(text);
-  return terms.map(t => {
-    if (t.indexOf("status:") === 0) {
-      return {
-        field: "status",
-        op: "==",
-        value: t.split(":")[1]
-      };
-    } else {
-      return {
-        field: "name",
-        op: "ilike",
-        value: `%${t}%`
-      };
-    }
-  });
 }
 
 function update_filter(text, fs, location, dispatch) {
