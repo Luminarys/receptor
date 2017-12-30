@@ -54,7 +54,7 @@ if (module.hot) {
   module.hot.accept('./ui/main.js', () => {
    const NextMain = require('./ui/main.js').default;
    skip_init = true;
-   render(<NextMain />, document.getElementById('react-root'));
+   render(<NextMain />);
   });
 }
 
