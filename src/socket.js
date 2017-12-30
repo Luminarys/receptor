@@ -10,8 +10,8 @@ let queue = [];
 const getURI = ({ uri, password }) => `${uri}${password ?
   `?password=${encodeURIComponent(password)}` : ''}`;
 
-export default function ws_send(type, body, callback = null) {
-  const _serial = serial++;
+export default function ws_send(type, body, callback = null, __serial = null) {
+  const _serial = __serial !== null ? __serial : serial++;
   if (callback) {
     transactions[_serial] = callback;
   }

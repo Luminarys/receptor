@@ -48,6 +48,7 @@
     "node-sass": "^4.7.2",
     "preact": "^8.2.7",
     "preact-compat": "^3.17.0",
+    "query-string": "^5.0.1",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "react-fontawesome": "^1.6.1",
