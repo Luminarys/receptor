@@ -1,6 +1,6 @@
 import { filter_subscribe, filter_unsubscribe } from './filter_subscribe';
 import { unsubscribe } from './subscribe';
-import { push } from 'react-router-redux';
+import { push_path } from './routing';
 
 export const UNION = 'UNION';
 export const SUBTRACT = 'SUBTRACT';
@@ -55,9 +55,9 @@ export default function selectTorrent(ids, action, navigate=true) {
     if (navigate) {
       const url_torrents = state.selection.slice(0, 3);
       if (url_torrents.length > 0) {
-        dispatch(push(`/torrents/${url_torrents}`));
+        dispatch(push_path(`/torrents/${url_torrents}`));
       } else {
-        dispatch(push("/"));
+        dispatch(push_path("/"));
       }
     }
   };

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { filter_subscribe } from '../actions/filter_subscribe';
-import { push } from 'react-router-redux';
+import { push_query } from '../actions/routing';
 import query from 'query-string';
 import search_criteria from '../search';
 
@@ -21,7 +21,7 @@ function update_filter(text, fs, location, dispatch) {
   const tfilter = fs.filter(fs => fs.kind === "torrent")[0];
   const criteria = search_criteria(text);
   dispatch(filter_subscribe("torrent", criteria, tfilter.serial));
-  dispatch(push(search_qs(text)));
+  dispatch(push_query(search_qs(text)));
 }
 
 function render(props) {
