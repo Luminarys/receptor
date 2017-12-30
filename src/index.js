@@ -16,13 +16,7 @@ import Nav from './ui/navigation';
 import Main from './ui/main';
 import Connection from './ui/connection';
 
-let skip_init = false;
-
 export function initialize(uri) {
-  if (skip_init) {
-    skip_init = false;
-    return;
-  }
   store.dispatch(socket_uri(uri));
   store.dispatch(socket_update(SOCKET_STATE.CONNECTING));
   ws_init(uri, () => {
@@ -53,7 +47,6 @@ render(<Main />);
 if (module.hot) {
   module.hot.accept('./ui/main.js', () => {
    const NextMain = require('./ui/main.js').default;
-   skip_init = true;
    render(<NextMain />);
   });
 }
