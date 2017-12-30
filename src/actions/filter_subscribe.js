@@ -3,9 +3,9 @@ import ws_send from '../socket';
 export const FILTER_SUBSCRIBE = 'FILTER_SUBSCRIBE';
 export const FILTER_UNSUBSCRIBE = 'FILTER_UNSUBSCRIBE';
 
-export function filter_subscribe(kind='torrent', criteria=[], serial=null) {
+export function filter_subscribe(kind='torrent', criteria=[], _serial=null) {
   return dispatch => {
-    const serial = ws_send(FILTER_SUBSCRIBE, { kind, criteria }, null, serial);
+    const serial = ws_send(FILTER_SUBSCRIBE, { kind, criteria }, null, _serial);
     dispatch({ type: FILTER_SUBSCRIBE, serial, kind, criteria });
   };
 }

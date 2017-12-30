@@ -15,17 +15,61 @@ function search_qs(text) {
   }${qs && "?" + qs}`;
 }
 
+// via https://stackoverflow.com/a/46946490
+const ssplit = str => str.match(/\\?.|^$/g).reduce((p, c) => {
+    if (c === '"') {
+        p.quote ^= 1;
+    } else if (!p.quote && c === ' ') {
+        p.a.push('');
+    } else {
+        p.a[p.a.length-1] += c.replace(/\\(.)/,"$1");
+    }
+    return p;
+}, {a: ['']}).a;
+
+function search_criteria(text) {
+  const terms = ssplit(text);
+  return terms.map(t => {
+    if (t.indexOf("status:") === 0) {
+      return {
+        field: "status",
+        op: "==",
+        value: t.split(":")[1]
+      };
+    } else {
+      return {
+        field: "name",
+        op: "ilike",
+        value: `%${t}%`
+      };
+    }
+  });
+}
+
 function update_filter(text, fs, location, dispatch) {
+  // there will always be one torrent filter
+  const tfilter = fs.filter(fs => fs.kind === "torrent")[0];
+  const criteria = search_criteria(text);
+  dispatch(filter_subscribe("torrent", criteria, tfilter.serial));
   dispatch(push(search_qs(text)));
 }
 
 function render(props) {
   const { dispatch, router } = props;
   const qs = query.parse(router.location.search);
+  const update = text => update_filter(
+    text || "", props.filter_subscribe, router.location, dispatch);
   const navto = where => e => {
     e.preventDefault();
-    dispatch(push(where));
+    update(where);
   };
+  const searchLink = (target, text) => <li className="nav-item">
+    <a
+      className={`nav-link ${qs.s === target && "active"}`}
+      href={search_qs(target)}
+      onClick={navto(target)}
+    >{text}</a>
+  </li>;
   return <nav className="navbar navbar-light navbar-toggleable-xl">
     <Link to="/" className="navbar-brand">receptor</Link>
     <div className="navbar-collapse collapse">
@@ -39,27 +83,9 @@ function render(props) {
         </li>
         <li className="nav-item" style={{minWidth: "1rem"}}>
         </li>
-        <li className="nav-item">
-          <a
-            className="nav-link"
-            href={search_qs("")}
-            onClick={navto(search_qs(""))}
-          >all</a>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link"
-            href={search_qs("status:leeching")}
-            onClick={navto(search_qs("status:leeching"))}
-          >leeching</a>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link"
-            href={search_qs("status:seeding")}
-            onClick={navto(search_qs("status:seeding"))}
-          >seeding</a>
-        </li>
+        {searchLink(undefined, "all")}
+        {searchLink("status:leeching", "leeching")}
+        {searchLink("status:seeding", "seeding")}
         <form className="form-inline">
           <input
             className="form-control mr-sm-2"
@@ -67,11 +93,7 @@ function render(props) {
             placeholder="Search"
             aria-label="Search"
             value={qs.s}
-            onChange={e => update_filter(
-              e.target.value,
-              props.filter_subscribe,
-              router.location,
-              dispatch)} />
+            onChange={e => update(e.target.value)} />
         </form>
       </ul>
     </div>
