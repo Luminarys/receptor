@@ -8,6 +8,12 @@ import TorrentProgress from './torrent_progress';
 class TorrentTable extends Component {
   render() {
     const { selection, torrents, dispatch } = this.props;
+    const name_style = {
+      maxWidth: `${window.innerWidth * 0.25}px`,
+      textOverflow: 'ellipsis',
+      overflowX: 'hidden',
+      whiteSpace: 'nowrap'
+    };
     return (
       <table className="table torrents">
         <thead>
@@ -25,12 +31,7 @@ class TorrentTable extends Component {
                 }}
               />
             </th>
-            <th style={{
-              maxWidth: `${window.innerWidth * 0.25}px`,
-              textOverflow: 'ellipsis',
-              overflowX: 'hidden',
-              whiteSpace: 'nowrap'
-            }}>name</th>
+            <th style={nameStyle}>name</th>
             <th style={{ minWidth: '75px' }}>up</th>
             <th style={{ minWidth: '75px' }}>down</th>
             <th style={{width: "18rem"}}>
@@ -62,7 +63,7 @@ class TorrentTable extends Component {
                   }
                 />
               </td>
-              <td>
+              <td style={nameStyle}>
                 <a
                   href={`/torrents/${t.id}`}
                   onClick={e => {
