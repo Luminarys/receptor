@@ -25,9 +25,14 @@ class TorrentTable extends Component {
                 }}
               />
             </th>
-            <th>name</th>
-            <th>up</th>
-            <th>down</th>
+            <th style={{
+              maxWidth: `${window.innerWidth * 0.25}px`,
+              textOverflow: 'ellipsis',
+              overflowX: 'hidden',
+              whiteSpace: 'nowrap'
+            }}>name</th>
+            <th style={{ minWidth: '75px' }}>up</th>
+            <th style={{ minWidth: '75px' }}>down</th>
             <th style={{width: "18rem"}}>
               <span class="ratio">
                 <span>ratio</span>
