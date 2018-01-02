@@ -31,7 +31,7 @@ class TorrentTable extends Component {
                 }}
               />
             </th>
-            <th style={nameStyle}>name</th>
+            <th style={name_style}>name</th>
             <th style={{ minWidth: '75px' }}>up</th>
             <th style={{ minWidth: '75px' }}>down</th>
             <th style={{width: "18rem"}}>
@@ -63,7 +63,7 @@ class TorrentTable extends Component {
                   }
                 />
               </td>
-              <td style={nameStyle}>
+              <td style={name_style}>
                 <a
                   href={`/torrents/${t.id}`}
                   onClick={e => {
