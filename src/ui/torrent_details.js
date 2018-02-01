@@ -28,7 +28,7 @@ import selectTorrent, {
 import { updateResource } from '../actions/resources';
 import { formatBitrate } from '../bitrate';
 
-const dlURI = (uri, password, id) => `${uri.replace('ws', 'http')}/dl/${id}?password=${encodeURIComponent(password)}`;
+const dlURI = (uri, token, id) => `${uri.replace('ws', 'http')}/dl/${id}?password=${encodeURIComponent(token)}`;
 
 function basename(path) {
   const parts = path.split("/");
@@ -36,7 +36,8 @@ function basename(path) {
 }
 
 function File({ dispatch, file }) {
-  const { uri, password } = store.getState().socket;
+  const { uri } = store.getState().socket;
+  const { download_token } = store.getState().server;
   return (
     <div className="file">
       <Progress
@@ -48,7 +49,7 @@ function File({ dispatch, file }) {
       </Progress>
       <div className="path" title={file.path}>
         {file.progress === 1.0 ?
-          <a href={dlURI(uri, password, file.id)} target="_new">
+          <a href={dlURI(uri, download_token, file.id)} target="_new">
             {basename(file.path)}
           </a> : basename(file.path)}
       </div>
