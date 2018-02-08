@@ -15,7 +15,9 @@ export function convertFromBitrate(value, unit) {
 }
 
 export function convertedRate(bitrate) {
-  if (bitrate > Rates["GiB/s"]) {
+  if (bitrate > Rates["TiB/s"]) {
+    return [bitrate / Rates["TiB/s"], "TiB/s"];
+  } else if (bitrate > Rates["GiB/s"]) {
     return [bitrate / Rates["GiB/s"], "GiB/s"];
   } else if (bitrate > Rates["MiB/s"]) {
     return [bitrate / Rates["MiB/s"], "MiB/s"];
@@ -46,6 +48,7 @@ export function formatBitrate(bitrate) {
 
 export function formatAmount(amount) {
   const units = {
+    "TiB/s": "TiB",
     "GiB/s": "GiB",
     "MiB/s": "MiB",
     "KiB/s": "KiB",

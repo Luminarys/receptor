@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { formatBitrate } from '../bitrate';
+import { formatBitrate, formatAmount } from '../bitrate';
 import { ws_disconnect } from '../socket';
 import DateDisplay from './date';
 import Ratio from './ratio';
@@ -28,6 +28,8 @@ function Server({ server, dispatch }) {
       <dl>
         <dt>Running since</dt>
         <dd><DateDisplay when={moment(server.started)} /></dd>
+        <dt>Disk space free</dt>
+        <dd>{formatAmount(server.free_space)}</dd>
         <dt>Current network use</dt>
         <dd>
           {`${
