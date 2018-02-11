@@ -1,4 +1,7 @@
 import numeral from "numeral";
+import query from 'query-string';
+import { filter_subscribe } from './actions/filter_subscribe';
+import { push_query } from './actions/routing';
 
 // via https://stackoverflow.com/a/46946490
 const ssplit = str => str.match(/\\?.|^$/g).reduce((p, c) => {
@@ -12,7 +15,7 @@ const ssplit = str => str.match(/\\?.|^$/g).reduce((p, c) => {
     return p;
 }, {a: ['']}).a;
 
-export default function search_criteria(text) {
+export function search_criteria(text) {
   if (!text) {
     return [];
   }
@@ -40,4 +43,22 @@ export default function search_criteria(text) {
       value: `%${t}%`
     }
   );
+}
+
+export function search_qs(text) {
+  const qs = query.stringify({
+    ...query.parse(location.search),
+    s: text || undefined
+  });
+  return `${
+    location.pathname === "/" ? location.pathname : ""
+  }${qs && "?" + qs}`;
+}
+
+export function update_filter(text, fs, location, dispatch) {
+  // there will always be one torrent filter
+  const tfilter = fs.filter(fs => fs.kind === "torrent")[0];
+  const criteria = search_criteria(text);
+  dispatch(filter_subscribe("torrent", criteria, tfilter.serial));
+  dispatch(push_query(search_qs(text)));
 }

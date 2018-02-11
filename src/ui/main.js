@@ -6,6 +6,7 @@ import TorrentTable from './torrent_table';
 import AddTorrent from './add_torrent';
 import TorrentDetails from './torrent_details';
 import Server from './server';
+import SearchHelp from './search_help';
 import ConnectionOverlay from './connection';
 
 export default class Main extends Component {
@@ -20,6 +21,7 @@ export default class Main extends Component {
             </div>
             <div className="col-md-4">
               <Route exact path="/add-torrent" component={AddTorrent} />
+              <Route path="/search-help" component={SearchHelp} />
               <Route path="/add-torrent/:magnet" component={AddTorrent} />
               <Route path="/torrents/:ids" component={TorrentDetails} />
               <Route exact path="/" component={Server} />

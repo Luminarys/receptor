@@ -12,7 +12,7 @@ import scss from '../scss/main.scss';
 import { ws_init } from './socket';
 import { filter_subscribe } from './actions/filter_subscribe';
 import { socket_uri, socket_update, SOCKET_STATE } from './actions/socket';
-import search_criteria from './search';
+import { search_criteria } from './search';
 
 import Main from './ui/main';
 import Connection from './ui/connection';

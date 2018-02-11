@@ -1,28 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
-import { filter_subscribe } from '../actions/filter_subscribe';
-import { push_query } from '../actions/routing';
+import FontAwesome from 'react-fontawesome';
 import query from 'query-string';
-import search_criteria from '../search';
-
-function search_qs(text) {
-  const qs = query.stringify({
-    ...query.parse(location.search),
-    s: text || undefined
-  });
-  return `${
-    location.pathname === "/" ? location.pathname : ""
-  }${qs && "?" + qs}`;
-}
-
-function update_filter(text, fs, location, dispatch) {
-  // there will always be one torrent filter
-  const tfilter = fs.filter(fs => fs.kind === "torrent")[0];
-  const criteria = search_criteria(text);
-  dispatch(filter_subscribe("torrent", criteria, tfilter.serial));
-  dispatch(push_query(search_qs(text)));
-}
+import { search_criteria, search_qs, update_filter } from '../search';
 
 function render(props) {
   const { dispatch, router } = props;
@@ -65,6 +46,11 @@ function render(props) {
             value={qs.s}
             onChange={e => update(e.target.value)} />
         </form>
+        <span class="navbar-text">
+          <Link to="/search-help">
+            <FontAwesome name="question-circle" />
+          </Link>
+        </span>
       </ul>
     </div>
   </nav>;
