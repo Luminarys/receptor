@@ -28,7 +28,7 @@ import selectTorrent, {
 import { updateResource } from '../actions/resources';
 import { formatBitrate } from '../bitrate';
 
-const dlURI = (uri, token, id) => `${uri.replace('ws', 'http')}/dl/${id}?password=${encodeURIComponent(token)}`;
+const dlURI = (uri, token, id) => `${uri.replace('ws', 'http')}/dl/${id}?token=${encodeURIComponent(token)}`;
 
 function basename(path) {
   const parts = path.split("/");
