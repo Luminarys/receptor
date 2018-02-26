@@ -20,6 +20,7 @@ class ConnectionOverlay extends Component {
     super();
     this.connect = this.connect.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.state = {}
   }
 
   componentDidMount() {
@@ -97,7 +98,6 @@ class ConnectionOverlay extends Component {
                   type="checkbox"
                   checked={autoconnect}
                   onChange={e => this.setState({ autoconnect: !autoconnect })}
-                  check
                 /> Autoconnect to this server
               </Label>
             </FormGroup>

@@ -169,7 +169,7 @@ class Torrent extends Component {
           >
             <FontAwesome name={torrent.status === "paused" ? "play" : "pause"} />
           </a>
-          <div class="status">{status(torrent.status)}</div>
+          <div className="status">{status(torrent.status)}</div>
           <TorrentProgress torrent={torrent} />
           <ButtonDropdown
             isOpen={this.state.removeDropdown}
@@ -412,7 +412,7 @@ class TorrentDetails extends Component {
           key={id}
         />)}
         {selection.length > 3 ?
-          <p class="text-center text-muted">
+          <p className="text-center text-muted">
             <strong>
               ...{selection.length - 3} more hidden...
             </strong>
