@@ -94,7 +94,7 @@ class TorrentTable extends Component {
             <th style={{ minWidth: '75px' }}>up</th>
             <th style={{ minWidth: '75px' }}>down</th>
             <th style={{width: "18rem"}}>
-              <span class="ratio">
+              <span className="ratio">
                 <span>ratio</span>
                 <span></span>
                 <span></span>

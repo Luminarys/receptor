@@ -5,14 +5,14 @@ import { formatAmount } from '../bitrate';
 export default function Ratio({ up, down }) {
   const ratio = up / down;
   if (isNaN(ratio)) {
-    return <span class="ratio">
+    return <span className="ratio">
       <span>0</span>
       <span></span>
       <span></span>
     </span>;
   }
   return (
-    <span class="ratio">
+    <span className="ratio">
       <span>
         {isFinite(ratio) ? `${ratio.toFixed(2)}` : "∞"}
       </span>

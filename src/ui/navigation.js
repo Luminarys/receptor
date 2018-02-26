@@ -46,7 +46,7 @@ function render(props) {
             value={qs.s}
             onChange={e => update(e.target.value)} />
         </form>
-        <span class="navbar-text">
+        <span className="navbar-text">
           <Link to="/search-help">
             <FontAwesome name="question-circle" />
           </Link>
