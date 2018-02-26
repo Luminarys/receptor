@@ -5,15 +5,16 @@ import { formatBitrate } from '../bitrate';
 import Ratio from './ratio';
 import TorrentProgress from './torrent_progress';
 
+const name_style = {
+  maxWidth: `${window.innerWidth * 0.25}px`,
+  textOverflow: 'ellipsis',
+  overflowX: 'hidden',
+  whiteSpace: 'nowrap'
+};
+
 class TorrentTable extends Component {
   render() {
     const { selection, torrents, dispatch } = this.props;
-    const name_style = {
-      maxWidth: `${window.innerWidth * 0.25}px`,
-      textOverflow: 'ellipsis',
-      overflowX: 'hidden',
-      whiteSpace: 'nowrap'
-    };
     return (
       <table className="table torrents">
         <thead>
@@ -46,40 +47,66 @@ class TorrentTable extends Component {
         </thead>
         <tbody>
           {Object.values(torrents).slice().sort((a, b) => a.name.localeCompare(b.name)).map(t =>
-            <tr
+            <Torrent
+              dispatch={dispatch}
+              torrent={t}
+              selection={selection}
               key={t.id}
-              className={`torrent ${
-                t.status
-              } ${
-                selection.indexOf(t.id) !== -1 ? "selected" : ""
-              }`}
-            >
-              <td>
-                <input
-                  type="checkbox"
-                  checked={selection.indexOf(t.id) !== -1}
-                  onChange={e =>
-                    dispatch(selectTorrent([t.id], e.target.checked ? UNION : SUBTRACT))
-                  }
-                />
-              </td>
-              <td style={name_style}>
-                <a
-                  href={`/torrents/${t.id}`}
-                  onClick={e => {
-                    e.preventDefault();
-                    dispatch(selectTorrent([t.id], EXCLUSIVE));
-                  }}
-                >{t.name}</a>
-              </td>
-              <td>{formatBitrate(t.rate_up)}</td>
-              <td>{formatBitrate(t.rate_down)}</td>
-              <td><Ratio up={t.transferred_up} down={t.transferred_down} /></td>
-              <td><TorrentProgress torrent={t} /></td>
-            </tr>
+            />
           )}
         </tbody>
       </table>
+    );
+  }
+}
+
+class Torrent extends Component {
+  shouldComponentUpdate(nextProps, _) {
+    const { selection, torrent } = this.props;
+    const nt = nextProps.torrent;
+    const active = selection.indexOf(torrent.id);
+    const nActive = nextProps.selection.indexOf(torrent.id);
+    return active !== nActive
+      || torrent.id !== nt.id
+      || torrent.status !== nt.status
+      || torrent.rate_down !== nt.rate_down
+      || torrent.rate_up !== nt.rate_up;
+  }
+
+  render() {
+    const { dispatch, selection, torrent } = this.props;
+    const t = torrent;
+    return (
+      <tr
+        className={`torrent ${
+          t.status
+        } ${
+          selection.indexOf(t.id) !== -1 ? "selected" : ""
+        }`}
+      >
+        <td>
+          <input
+            type="checkbox"
+            checked={selection.indexOf(t.id) !== -1}
+            onChange={e =>
+              dispatch(selectTorrent([t.id], e.target.checked ? UNION : SUBTRACT))
+            }
+          />
+        </td>
+        <td style={name_style}>
+          <a
+            href={`/torrents/${t.id}`}
+            onClick={e => {
+              e.preventDefault();
+              dispatch(selectTorrent([t.id], EXCLUSIVE));
+            }}
+          >{t.name}</a>
+        </td>
+        <td>{formatBitrate(t.rate_up)}</td>
+        <td>{formatBitrate(t.rate_down)}</td>
+        <td><Ratio up={t.transferred_up} down={t.transferred_down} /></td>
+        <td><TorrentProgress torrent={t} /></td>
+      </tr>
     );
   }
 }
