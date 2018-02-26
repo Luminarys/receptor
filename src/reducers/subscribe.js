@@ -8,12 +8,12 @@ export default function subscribe(state = [], action) {
       return [ ...state, ...ids.map(id => ({ serial, id })) ];
     }
     case UNSUBSCRIBE: {
-      const { ids } = action;
-      return state.filter(sub => ids.indexOf(sub.id) === -1);
+      const ids = new Set(action.ids);
+      return state.filter(sub => !ids.has(sub.id));
     }
     case RESOURCES_REMOVED: {
-      const { ids } = action;
-      return state.filter(sub => ids.indexOf(sub.id) === -1);
+      const ids = new Set(action.ids);
+      return state.filter(sub => !ids.has(sub.id));
     }
   }
   return state;
