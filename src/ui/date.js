@@ -3,11 +3,11 @@ import formatDate from '../date';
 
 export default class DateDisplay extends Component {
   componentDidMount() {
-    setInterval(() => this.forceUpdate(), this.interval);
+    this._interval = setInterval(() => this.forceUpdate(), this.interval);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this._interval);
   }
 
   render() {
