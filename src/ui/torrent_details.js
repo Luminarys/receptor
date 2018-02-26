@@ -35,55 +35,69 @@ function basename(path) {
   return parts[parts.length - 1];
 }
 
-function File({ dispatch, file }) {
-  const { uri } = store.getState().socket;
-  const { download_token } = store.getState().server;
-  return (
-    <div className="file">
-      <Progress
-        value={file.progress * 100}
-        color={file.progress != 1.0 ? "success" : "primary"}
-      >
-        {file.progress === 1.0 ?
-          "done" : `${(file.progress * 100).toFixed(0)}%`}
-      </Progress>
-      <div className="path" title={file.path}>
-        {file.progress === 1.0 ?
-          <a href={dlURI(uri, download_token, file.id)} target="_new">
-            {basename(file.path)}
-          </a> : basename(file.path)}
-      </div>
-      <div>
-        <Input
-          type="select"
-          id="priority"
-          value={file.priority}
-          onChange={e => dispatch(updateResource({
-            id: file.id,
-            priority: parseInt(e.target.value)
-          }))}
+class File extends Component {
+  shouldComponentUpdate(nextProps, _) {
+    return nextProps.file !== this.props.file;
+  }
+
+  render() {
+    const { dispatch, file } = this.props;
+    const { uri } = store.getState().socket;
+    const { download_token } = store.getState().server;
+    return (
+      <div className="file">
+        <Progress
+          value={file.progress * 100}
+          color={file.progress != 1.0 ? "success" : "primary"}
         >
-          <option value="0">Skip</option>
-          <option value="1">Lowest</option>
-          <option value="2">Low</option>
-          <option value="3">Normal</option>
-          <option value="4">High</option>
-          <option value="5">Highest</option>
-        </Input>
+          {file.progress === 1.0 ?
+            "done" : `${(file.progress * 100).toFixed(0)}%`}
+        </Progress>
+        <div className="path" title={file.path}>
+          {file.progress === 1.0 ?
+            <a href={dlURI(uri, download_token, file.id)} target="_new">
+              {basename(file.path)}
+            </a> : basename(file.path)}
+        </div>
+        <div>
+          <Input
+            type="select"
+            id="priority"
+            value={file.priority}
+            onChange={e => dispatch(updateResource({
+              id: file.id,
+              priority: parseInt(e.target.value)
+            }))}
+          >
+            <option value="0">Skip</option>
+            <option value="1">Lowest</option>
+            <option value="2">Low</option>
+            <option value="3">Normal</option>
+            <option value="4">High</option>
+            <option value="5">Highest</option>
+          </Input>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-function Peer({ peer }) {
-  return (
-    <div className="peer">
-      <div style={{flexGrow: 5}}>{peer.ip}</div>
-      <div style={{flexBasis: "18%"}}>{formatBitrate(peer.rate_up)} up</div>
-      <div style={{flexBasis: "18%"}}>{formatBitrate(peer.rate_down)} down</div>
-      <div style={{flexBasis: "18%"}}>has {`${(peer.availability * 100).toFixed(0)}%`}</div>
-    </div>
-  );
+class Peer extends Component {
+  shouldComponentUpdate(nextProps, _) {
+    return nextProps.peer !== this.props.peer;
+  }
+
+  render() {
+    const { peer } = this.props;
+    return (
+      <div className="peer">
+        <div style={{flexGrow: 5}}>{peer.ip}</div>
+        <div style={{flexBasis: "18%"}}>{formatBitrate(peer.rate_up)} up</div>
+        <div style={{flexBasis: "18%"}}>{formatBitrate(peer.rate_down)} down</div>
+        <div style={{flexBasis: "18%"}}>has {`${(peer.availability * 100).toFixed(0)}%`}</div>
+      </div>
+    );
+  }
 }
 
 // TODO: move to separate component
@@ -112,6 +126,14 @@ class Torrent extends Component {
       peersShown: false,
       removeDropdown: false
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.torrent !== this.props.torrent
+      || nextState.peersShown !== this.state.peersShown
+      || nextState.trackersShown !== this.state.trackersShown
+      || nextState.filesShown !== this.state.filesShown
+      || nextState.infoShown !== this.state.infoShown;
   }
 
   toggleTorrentState(torrent) {
@@ -222,9 +244,11 @@ class Torrent extends Component {
           <Card style={{marginBottom: "1rem"}}>
             <CardBlock style={{padding: "0"}}>
               <div className="files flex-table" style={{marginBottom: "0"}}>
-                {files.slice().sort((a, b) =>
-                  a.path.localeCompare(b.path)).map(file =>
-                    <File dispatch={dispatch} file={file} />)}
+                {this.state.filesShown
+                  ? files.slice()
+                    .sort((a, b) => a.path.localeCompare(b.path))
+                    .map(file => <File dispatch={dispatch} file={file}/>)
+                  : null}
               </div>
             </CardBlock>
           </Card>
@@ -264,7 +288,7 @@ class Torrent extends Component {
           <Card style={{marginBottom: "1rem"}}>
             <CardBlock style={{padding: "0"}}>
               <div className="peers flex-table" style={{marginBottom: "0"}}>
-                {peers.map(peer => <Peer peer={peer} />)}
+                {this.state.peersShown ? peers.map(peer => <Peer peer={peer} />) : null}
               </div>
               {peers.length === 0 &&
                 <div style={{padding: "0.5rem 0 0 0.5rem"}}>
@@ -361,15 +385,21 @@ class TorrentDetails extends Component {
       selection,
       dispatch
     } = this.props;
-    const _files = Object.values(files).reduce((s, f) => ({
-      ...s, [f.torrent_id]: [...(s[f.torrent_id] || []), f]
-    }), {});
-    const _trackers = Object.values(trackers).reduce((s, t) => ({
-      ...s, [t.torrent_id]: [...(s[t.torrent_id] || []), t]
-    }), {});
-    const _peers = Object.values(peers).reduce((s, p) => ({
-      ...s, [p.torrent_id]: [...(s[p.torrent_id] || []), p]
-    }), {});
+    const index_by_tid = (res)  => {
+      let _indexed = {};
+      Object.values(res).map(r => {
+        if (!(r.torrent_id in _indexed)) {
+          _indexed[r.torrent_id] = [];
+        }
+        _indexed[r.torrent_id].push(r);
+      });
+      return _indexed;
+    };
+
+    const _files = index_by_tid(files);
+    const _trackers = index_by_tid(trackers);
+    const _peers = index_by_tid(peers);
+
     return (
       <div>
         {selection.length > 1 ? this.renderHeader.bind(this)() : null}

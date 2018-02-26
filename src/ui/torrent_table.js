@@ -12,55 +12,7 @@ const name_style = {
   whiteSpace: 'nowrap'
 };
 
-class TorrentTable extends Component {
-  render() {
-    const { selection, torrents, dispatch } = this.props;
-    return (
-      <table className="table torrents">
-        <thead>
-          <tr>
-            <th style={{width: "1px"}}>
-              <input
-                type="checkbox"
-                checked={selection.length === Object.values(torrents).length}
-                onChange={e => {
-                  if (selection.length > 0) {
-                    dispatch(selectTorrent([], EXCLUSIVE));
-                  } else {
-                    dispatch(selectTorrent(Object.keys(torrents), EXCLUSIVE));
-                  }
-                }}
-              />
-            </th>
-            <th style={name_style}>name</th>
-            <th style={{ minWidth: '75px' }}>up</th>
-            <th style={{ minWidth: '75px' }}>down</th>
-            <th style={{width: "18rem"}}>
-              <span class="ratio">
-                <span>ratio</span>
-                <span></span>
-                <span></span>
-              </span>
-            </th>
-            <th>progress</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.values(torrents).slice().sort((a, b) => a.name.localeCompare(b.name)).map(t =>
-            <Torrent
-              dispatch={dispatch}
-              torrent={t}
-              selection={selection}
-              key={t.id}
-            />
-          )}
-        </tbody>
-      </table>
-    );
-  }
-}
-
-class Torrent extends Component {
+class _Torrent extends Component {
   shouldComponentUpdate(nextProps, _) {
     const { selection, torrent } = this.props;
     const nt = nextProps.torrent;
@@ -107,6 +59,60 @@ class Torrent extends Component {
         <td><Ratio up={t.transferred_up} down={t.transferred_down} /></td>
         <td><TorrentProgress torrent={t} /></td>
       </tr>
+    );
+  }
+}
+
+const Torrent = connect((state, props) => {
+  return {
+    torrent: state.torrents[props.id],
+    selection: state.selection,
+  };
+})(_Torrent);
+
+class TorrentTable extends Component {
+  render() {
+    const { selection, torrents, dispatch } = this.props;
+    return (
+      <table className="table torrents">
+        <thead>
+          <tr>
+            <th style={{width: "1px"}}>
+              <input
+                type="checkbox"
+                checked={selection.length === Object.values(torrents).length}
+                onChange={e => {
+                  if (selection.length > 0) {
+                    dispatch(selectTorrent([], EXCLUSIVE));
+                  } else {
+                    dispatch(selectTorrent(Object.keys(torrents), EXCLUSIVE));
+                  }
+                }}
+              />
+            </th>
+            <th style={name_style}>name</th>
+            <th style={{ minWidth: '75px' }}>up</th>
+            <th style={{ minWidth: '75px' }}>down</th>
+            <th style={{width: "18rem"}}>
+              <span class="ratio">
+                <span>ratio</span>
+                <span></span>
+                <span></span>
+              </span>
+            </th>
+            <th>progress</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.values(torrents).slice().sort((a, b) => a.name.localeCompare(b.name)).map(t =>
+            <Torrent
+              dispatch={dispatch}
+              id={t.id}
+              key={t.id}
+            />
+          )}
+        </tbody>
+      </table>
     );
   }
 }
