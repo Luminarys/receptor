@@ -18,11 +18,7 @@ class _Torrent extends Component {
     const nt = nextProps.torrent;
     const active = selection.indexOf(torrent.id);
     const nActive = nextProps.selection.indexOf(torrent.id);
-    return active !== nActive
-      || torrent.id !== nt.id
-      || torrent.status !== nt.status
-      || torrent.rate_down !== nt.rate_down
-      || torrent.rate_up !== nt.rate_up;
+    return active !== nActive || torrent !== nt;
   }
 
   render() {
