@@ -5,6 +5,8 @@ const defines = {
   "DEFAULT_WS_URI": process.env.WEBSOCKET_URI || "ws://localhost:8412/"
 };
 
+const env = process.env.ENVIRONMENT || "development";
+
 module.exports = {
   devtool: "source-map",
   entry: [
@@ -50,10 +52,10 @@ module.exports = {
     ]
   },
   plugins:[
-    new webpack.HotModuleReplacementPlugin(),
+    (env !== "production" && new webpack.HotModuleReplacementPlugin()),
     new webpack.EnvironmentPlugin(defines),
     new webpack.NamedModulesPlugin(),
-  ],
+  ].filter(p => p),
   resolve: {
     alias: {
       "react": "preact-compat",
