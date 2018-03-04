@@ -4,7 +4,7 @@ packages:
   - npm
   - rsync
 sources:
-  - https://git.sr.ht/~sircmpwn/receptor
+  - https://github.com/SirCmpwn/receptor
 environment:
   deploy: synapse@synapse-bt.org
 secrets:
