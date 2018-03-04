@@ -10,11 +10,11 @@ const env = process.env.ENVIRONMENT || "development";
 module.exports = {
   devtool: "source-map",
   entry: [
-    'react-hot-loader/patch',
-    "webpack-hot-middleware/client",
+    (env !== "production" && "react-hot-loader/patch"),
+    (env !== "production" && "webpack-hot-middleware/client"),
     "font-awesome-sass-loader!./font-awesome.config.js",
     "./src/index.js"
-  ],
+  ].filter(f => f),
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
