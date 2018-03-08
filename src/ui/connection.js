@@ -28,11 +28,11 @@ class ConnectionOverlay extends Component {
     if (socket.state === SOCKET_STATE.DISCONNECTED) {
       const uri = localStorage.getItem("autoconnect");
       const password = localStorage.getItem("password");
-      this.state = {
-        uri: uri || "ws://127.0.0.1:8412",
+      this.setState({
+        uri: uri || process.env.DEFAULT_WS_URI,
         password,
         autoconnect: !!uri
-      };
+      });
       if (uri) {
         initialize(getURI(this.state.uri, this.state.password));
       }

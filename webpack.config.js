@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 const defines = {
-  "DEFAULT_WS_URI": process.env.WEBSOCKET_URI || "ws://localhost:8412/"
+  "DEFAULT_WS_URI": process.env.WEBSOCKET_URI || "ws://127.0.0.1:8412/"
 };
 
 const env = process.env.ENVIRONMENT || "development";
