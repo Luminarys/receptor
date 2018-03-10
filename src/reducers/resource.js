@@ -16,7 +16,7 @@ export default function resourceReducer(type) {
     switch (action.type) {
       case UPDATE_RESOURCES:
         action.resources
-          .filter(r => r.type ===type)
+          .filter(r => r.type === type)
           .map(r => ns[r.id] = hack(state[r.id], { ...state[r.id], ...r }));
         return ns;
       case RESOURCES_REMOVED:
