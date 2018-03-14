@@ -66,8 +66,8 @@ function SearchHelp(props) {
         Here are some example searches:
       </p>
       <ul>
-        <li>{searchLink("state:seeding")}</li>
-        <li>{searchLink("state:leeching")}</li>
+        <li>{searchLink("status:seeding")}</li>
+        <li>{searchLink("status:idle")}</li>
         <li>{searchLink("rate_up>1048576")}</li>
         <li>{searchLink("files>1")}</li>
         <li>{searchLink("files==1")}</li>
