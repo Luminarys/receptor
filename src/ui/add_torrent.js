@@ -32,6 +32,7 @@ class AddTorrent extends Component {
       torrent: null,
       files: [],
       start: true,
+      path: null,
       uploadThrottle: null,
       downloadThrottle: null,
       priority: 3,
@@ -100,7 +101,7 @@ class AddTorrent extends Component {
 
   uploadFile() {
     this.setState({ loading: true });
-    const { magnet, file, start } = this.state;
+    const { magnet, file, start, path } = this.state;
     const { dispatch } = this.props;
     const customize =
       this.state.priority !== 3 ||
@@ -119,12 +120,14 @@ class AddTorrent extends Component {
     if (magnet) {
       ws_send("UPLOAD_MAGNET", {
         uri: magnet,
-        start: start && !customize
+        start: start && !customize,
+        path
       }, handleOffer);
     } else {
       ws_send("UPLOAD_TORRENT", {
         size: file.size,
-        start: start && !customize
+        start: start && !customize,
+        path
       }, handleOffer);
     }
   }
@@ -168,6 +171,7 @@ class AddTorrent extends Component {
   renderOptions() {
     const {
       start,
+      path,
       priority,
       downloadThrottle,
       uploadThrottle
@@ -180,6 +184,8 @@ class AddTorrent extends Component {
             id="new-torrent"
             start={start}
             startChanged={start => this.setState({ start })}
+            path={path}
+            pathChanged={path => this.setState({ path: path || null })}
             priority={priority}
             priorityChanged={priority => this.setState({ priority })}
             downloadThrottle={downloadThrottle}
@@ -187,7 +193,7 @@ class AddTorrent extends Component {
               this.setState({ downloadThrottle })}
             uploadThrottle={uploadThrottle}
             uploadThrottleChanged={uploadThrottle =>
-              { console.log(uploadThrottle); this.setState({ uploadThrottle }); }}
+              this.setState({ uploadThrottle })}
           />
         </CardBlock>
       </Card>
