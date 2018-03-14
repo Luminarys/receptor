@@ -73,8 +73,8 @@ const Torrent = connect((state, props) => {
 
 const comparators = {
   "name": (a, b) => a.name.localeCompare(b.name),
-  "up": (a, b) => a.up - b.up,
-  "down": (a, b) => a.down - b.down,
+  "up": (a, b) => a.rate_up - b.rate_up,
+  "down": (a, b) => a.rate_down - b.rate_down,
   "ul": (a, b) => a.transferred_up - b.transferred_up,
   "dl": (a, b) => a.transferred_down - b.transferred_down,
   "ratio": (a, b) => {
