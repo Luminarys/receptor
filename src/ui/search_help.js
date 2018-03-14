@@ -28,7 +28,9 @@ function SearchHelp(props) {
     "throttle_down": "throttle down in bits/sec",
     "transferred_up": "total transfer up in bits/sec",
     "transferred_down": "total transfer down in bits/sec",
+    "tracker": "tracker url",
     "peers": "number of peers",
+    "trackers": "number of trackers",
     "files": "number of files",
   };
 
@@ -64,12 +66,13 @@ function SearchHelp(props) {
         Here are some example searches:
       </p>
       <ul>
-        <li>{searchLink("state:seeding")}</li>
-        <li>{searchLink("state:leeching")}</li>
+        <li>{searchLink("status:seeding")}</li>
+        <li>{searchLink("status:idle")}</li>
         <li>{searchLink("rate_up>1048576")}</li>
         <li>{searchLink("files>1")}</li>
         <li>{searchLink("files==1")}</li>
         <li>{searchLink("progress<0.1")}</li>
+        <li>{searchLink("tracker:archlinux.org")}</li>
       </ul>
     </div>
   );

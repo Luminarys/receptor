@@ -27,7 +27,10 @@ export function search_criteria(text) {
       }
       const [field, value] = t.split(op);
       if (op == ":") {
-        return { op: "ilike", field, value: `%${t}%` };
+        if (field == "tracker") {
+          return { op: "has", field: "tracker_urls", value };
+        }
+        return { op: "ilike", field, value };
       }
       if (!isNaN(numeral(value).value())) {
         return {
