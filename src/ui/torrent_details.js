@@ -37,13 +37,15 @@ function basename(path) {
 
 class File extends Component {
   shouldComponentUpdate(nextProps, _) {
-    return nextProps.file !== this.props.file;
+    return nextProps.file !== this.props.file
+      || nextProps.server !== this.props.server
+      || nextProps.socket !== this.props.socket;
   }
 
   render() {
-    const { dispatch, file } = this.props;
-    const { uri } = store.getState().socket;
-    const { download_token } = store.getState().server;
+    const { dispatch, file, server, socket } = this.props;
+    const { download_token } = server;
+    const { uri } = socket;
     return (
       <div className="file">
         <Progress
@@ -146,7 +148,15 @@ class Torrent extends Component {
   }
 
   render() {
-    const { dispatch, torrent, files, trackers, peers } = this.props;
+    const {
+      dispatch,
+      torrent,
+      files,
+      trackers,
+      peers,
+      server,
+      socket,
+    } = this.props;
     const status = s => s[0].toUpperCase() + s.slice(1);
 
     if (!torrent || !files) {
@@ -254,7 +264,12 @@ class Torrent extends Component {
                 {this.state.filesShown
                   ? files.slice()
                     .sort((a, b) => a.path.localeCompare(b.path))
-                    .map(file => <File dispatch={dispatch} file={file}/>)
+                    .map(file => <File
+                      dispatch={dispatch}
+                      file={file}
+                      server={server}
+                      socket={socket}
+                    />)
                   : null}
               </div>
             </CardBlock>
@@ -390,6 +405,8 @@ class TorrentDetails extends Component {
       trackers,
       peers,
       selection,
+      server,
+      socket,
       dispatch
     } = this.props;
     const index_by_tid = (res)  => {
@@ -416,6 +433,8 @@ class TorrentDetails extends Component {
           files={_files[id] || []}
           trackers={_trackers[id] || []}
           peers={_peers[id] || []}
+          server={server}
+          socket={socket}
           key={id}
         />)}
         {selection.length > 3 ?
@@ -437,5 +456,6 @@ export default connect(state => ({
   trackers: state.trackers,
   peers: state.peers,
   selection: state.selection,
-  server: state.server
+  server: state.server,
+  socket: state.socket,
 }))(TorrentDetails);
