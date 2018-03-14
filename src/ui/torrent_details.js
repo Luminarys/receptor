@@ -230,6 +230,12 @@ class Torrent extends Component {
         <Collapse isOpen={this.state.infoShown}>
           <Card style={{marginBottom: "1rem"}}>
             <CardBlock>
+              <button
+                className="btn btn-sm btn-outline-primary pull-right"
+                onClick={() => {
+                  ws_send("VALIDATE_RESOURCES", { ids: [torrent.id] })
+                }}
+              >Initiate hash check</button>
               <dl>
                 <dt>Type</dt>
                 <dd>{torrent.private ? "Private" : "Public"}</dd>
