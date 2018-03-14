@@ -221,10 +221,16 @@ class Torrent extends Component {
           <Card style={{marginBottom: "1rem"}}>
             <CardBlock>
               <dl>
+                <dt>Type</dt>
+                <dd>{torrent.private ? "Private" : "Public"}</dd>
                 <dt>Downloading to</dt>
                 <dd>{torrent.path}</dd>
                 <dt>Created</dt>
                 <dd><DateDisplay when={moment(torrent.created)} /></dd>
+                <dt>Comment</dt>
+                <dd>{torrent.comment || "None"}</dd>
+                <dt>Creator</dt>
+                <dd>{torrent.creator || "None"}</dd>
               </dl>
               <TorrentOptions
                 id={torrent.id}
