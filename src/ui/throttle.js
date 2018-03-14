@@ -11,26 +11,34 @@ export default class Throttle extends Component {
     super();
     this.setLimit = this.setLimit.bind(this);
     this.setUnit = this.setUnit.bind(this);
-    this.state = { unit: "MiB/s" };
+    this.state = { custom: 1024 * 1024, unit: "MiB/s" };
   }
 
   setLimit(limit) {
     const { onChange } = this.props;
     const { unit } = this.state;
+    let custom = this.props.limit;
+    if (custom <= 0 || custom === null) {
+      custom = this.state.custom;
+    }
+    if (isNaN(limit)) {
+      limit = 0;
+    }
     const converted = limit <= 0 || limit === null ?
       limit : convertToBitrate(limit, unit);
     onChange && onChange(converted);
+    this.setState({ unit, custom });
   }
 
   setUnit(unit) {
     const limit = convertFromBitrate(this.props.limit, this.state.unit);
-    this.setState({ unit });
+    this.setState({ unit, custom: this.state.custom });
     this.setLimit(limit);
   }
 
   render() {
     const { global, limit, legend, prop } = this.props;
-    const { unit } = this.state;
+    const { unit, custom } = this.state;
     return (
       <div>
         <FormGroup tag="fieldset">
@@ -65,7 +73,7 @@ export default class Throttle extends Component {
                 type="radio"
                 name={prop}
                 id={`${prop}-custom`}
-                onChange={e => this.setLimit(1)}
+                onChange={e => this.setLimit(convertFromBitrate(custom, unit))}
                 checked={limit !== -1 && limit !== null}
               /> Custom
             </Label>
