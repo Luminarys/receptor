@@ -12,6 +12,8 @@ export default class TorrentOptions extends Component {
       id,
       start,
       startChanged,
+      path,
+      pathChanged,
       priority,
       priorityChanged,
       downloadThrottle,
@@ -31,6 +33,16 @@ export default class TorrentOptions extends Component {
                 id="start-immediately"
               /> Start immediately
             </Label>
+          </FormGroup>
+        }
+        {typeof path !== "undefined" &&
+          <FormGroup>
+            <Input
+              type="text"
+              placeholder="Path"
+              value={path}
+              onChange={e => pathChanged(e.target.value)}
+            />
           </FormGroup>
         }
         <FormGroup>
