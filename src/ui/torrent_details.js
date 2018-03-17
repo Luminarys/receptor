@@ -53,7 +53,7 @@ class File extends Component {
           color={file.progress != 1.0 ? "success" : "primary"}
         >
           {file.progress === 1.0 ?
-            "done" : `${(file.progress * 100).toFixed(0)}%`}
+            "done" : `${Math.floor(file.progress * 100)}%`}
         </Progress>
         <div className="path" title={file.path}>
           {file.progress === 1.0 ?
