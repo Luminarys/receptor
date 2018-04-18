@@ -251,8 +251,11 @@ class Torrent extends Component {
               <TorrentOptions
                 id={torrent.id}
                 priority={torrent.priority}
+                strategy={torrent.strategy}
                 priorityChanged={priority =>
                   dispatch(updateResource({ id: torrent.id, priority }))}
+                strategyChanged={strategy =>
+                  dispatch(updateResource({ id: torrent.id, strategy }))}
                 downloadThrottle={torrent.throttle_down}
                 downloadThrottleChanged={throttle_down =>
                   dispatch(updateResource({ id: torrent.id, throttle_down }))}

@@ -11,6 +11,7 @@ export default class TorrentOptions extends Component {
     const {
       id,
       start,
+      strategy,
       startChanged,
       path,
       pathChanged,
@@ -18,6 +19,7 @@ export default class TorrentOptions extends Component {
       priorityChanged,
       downloadThrottle,
       downloadThrottleChanged,
+      strategyChanged,
       uploadThrottle,
       uploadThrottleChanged,
     } = this.props;
@@ -58,6 +60,18 @@ export default class TorrentOptions extends Component {
             <option value="3">Normal</option>
             <option value="4">High</option>
             <option value="5">Highest</option>
+          </Input>
+        </FormGroup>
+        <FormGroup>
+          <Label for="strategy">Download Strategy</Label>
+          <Input
+            type="select"
+            id="strategy"
+            value={strategy}
+            onChange={e => strategyChanged(e.target.value)}
+          >
+            <option value="rarest">Rarest</option>
+            <option value="sequential">Sequential</option>
           </Input>
         </FormGroup>
         <Throttle
