@@ -132,6 +132,9 @@ class Torrent extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.torrent !== this.props.torrent
+      || nextProps.trackers !== this.props.trackers
+      || nextProps.files !== this.props.files
+      || nextProps.peers !== this.props.peers
       || nextState.removeDropdown !== this.state.removeDropdown
       || nextState.peersShown !== this.state.peersShown
       || nextState.trackersShown !== this.state.trackersShown
