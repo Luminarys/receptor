@@ -44,6 +44,7 @@
     "font-awesome-sass-loader": "^2.0.1",
     "history": "^4.7.2",
     "isomorphic-fetch": "^2.2.1",
+    "js-sha1": "^0.6.0",
     "moment": "^2.20.1",
     "node-sass": "^4.7.2",
     "numeral": "^2.0.6",

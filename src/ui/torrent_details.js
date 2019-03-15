@@ -14,6 +14,7 @@ import {
   Input,
 } from 'reactstrap';
 import moment from 'moment';
+import sha1 from 'js-sha1';
 import TorrentOptions from './torrent_options';
 import TorrentProgress from './torrent_progress';
 import ws_send from '../socket';
@@ -28,7 +29,10 @@ import selectTorrent, {
 import { updateResource } from '../actions/resources';
 import { formatBitrate } from '../bitrate';
 
-const dlURI = (uri, token, id) => `${uri.replace('ws', 'http')}/dl/${id}?token=${encodeURIComponent(token)}`;
+const dlURI = (uri, token, id) => {
+  const dlToken = encodeURIComponent(btoa(String.fromCharCode(...new Uint8Array(sha1.arrayBuffer(id + token)))));
+  return `${uri.replace('ws', 'http')}/dl/${id}?token=${dlToken}`;
+};
 
 function basename(path) {
   const parts = path.split("/");
