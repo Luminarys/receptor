@@ -22,7 +22,7 @@ function render(props) {
     >{text}</a>
   </li>;
   return <nav className="navbar navbar-light navbar-toggleable-xl">
-    <Link to="/" className="navbar-brand">receptor</Link>
+    <Link to="/" className="navbar-brand" onClick={e => update("")}>receptor</Link>
     <div className="navbar-collapse collapse">
       <ul className="navbar-nav mr-auto">
         <li className="nav-item">
