@@ -279,7 +279,7 @@ class Torrent extends Component {
               <div className="files flex-table" style={{marginBottom: "0"}}>
                 {this.state.filesShown
                   ? files.slice()
-                    .sort((a, b) => a.path.localeCompare(b.path))
+                    .sort((a, b) => a.path.localeCompare(b.path, undefined, {numeric: true}))
                     .map(file => <File
                       dispatch={dispatch}
                       file={file}
